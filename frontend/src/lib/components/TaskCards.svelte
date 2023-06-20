@@ -1,0 +1,84 @@
+<script>
+	import {
+		Button,
+		Modal,
+		Card,
+		Checkbox,
+		Label,
+		Select,
+		MenuButton,
+		DropdownItem,
+		Dropdown
+	} from 'flowbite-svelte';
+	let clickOutsideModal = false;
+	let status = [
+		{
+			value: 'todo',
+			name: 'todo'
+		},
+		{
+			value: 'doing',
+			name: 'doing'
+		},
+		{
+			value: 'done',
+			name: 'done'
+		}
+	];
+
+	let placement = 'right';
+</script>
+
+<!-- <Button on:click={() => clickOutsideModal = true}>Default modal</Button> -->
+
+<Card on:click={() => (clickOutsideModal = true)} class="w-full cursor-pointer">
+	<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+		Noteworthy technology acquisitions 2021
+	</h5>
+	<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
+		Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological
+		order.
+	</p>
+</Card>
+
+<Modal size="sm" title="Terms of Service" bind:open={clickOutsideModal} autoclose outsideclose>
+	<div class="mb-4 flex flex-col gap-2">
+		<h3 class="text-2xl font-bold text-gray-900">
+			Lorem ipsum dolor sit amet consectetur adipisicin
+		</h3>
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. In harum laboriosam laborum
+			dignissimos. Recusandae quis cum perspiciatis, facilis quibusdam maiores nulla minus ullam rem
+			praesentium voluptatibus laboriosam molestiae pariatur quaerat!
+		</p>
+	</div>
+
+	<div class="flex flex-col gap-3">
+		<small class="text-gray-900"> Subtasks (1 of 3) </small>
+		<div class="flex flex-col gap-1">
+			{#each Array(3) as _, idx}
+				<div class="bg-[#f4ecf1] p-2">
+					<Checkbox>items {idx}</Checkbox>
+				</div>
+			{/each}
+		</div>
+
+		<Label class="space-y-2">
+			<span>Status</span>
+			<Select class="mt-2" name="status" required>
+				{#each status as { name, value }}
+					<option {value}>{name}</option>
+				{/each}
+			</Select>
+		</Label>
+	</div>
+
+	<div class="flex justify-end">
+		<MenuButton class="dots-menu dark:text-white" vertical />
+		<Dropdown {placement} class="w-36">
+			<DropdownItem class=" hover:bg-gray-300">Edit</DropdownItem>
+			<DropdownItem class=" hover:bg-gray-300">Export data</DropdownItem>
+			<DropdownItem class=" hover:bg-gray-300">Delete</DropdownItem>
+		</Dropdown>
+	</div>
+</Modal>
