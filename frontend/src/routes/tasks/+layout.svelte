@@ -13,30 +13,43 @@
 		Tooltip,
 		DarkMode
 	} from 'flowbite-svelte';
-	import { LayoutGrid, Plus, X, Settings, LogOut, ChevronLeft, Eye, EyeOff, Sun, Moon } from 'lucide-svelte';
+	import {
+		LayoutGrid,
+		Plus,
+		X,
+		Settings,
+		LogOut,
+		ChevronLeft,
+		Eye,
+		EyeOff,
+		Sun,
+		Moon
+	} from 'lucide-svelte';
 	import TaskCards from '$lib/components/TaskCards.svelte';
-	import '../../app.postcss'
-	import '../../app.css'
+	import '../../app.postcss';
+	import '../../app.css';
 	import { pb } from '$lib/pocketbase.js';
-	import type { PageServerData } from './$types.js';
+	import type { PageServerData, SubmitFunction } from './$types.js';
 	import type { ListResult, Record } from 'pocketbase';
 	import { onMount } from 'svelte';
-	import { enhance } from '$app/forms';
-	import {page} from '$app/stores'
+	import { applyAction, enhance } from '$app/forms';
+	import { page } from '$app/stores';
+	import { invalidateAll } from '$app/navigation';
 
-
-
-
+	export let data;
 	
 
+	$: ({ record } = data);
 	let addTaskModal = false;
-	let boardModal = false
+	let boardModal = false;
+	let boardValue = '';
 	let id = 1;
 	let headerMenuPlacemant = 'bottom';
 	let sidebar = true;
 	let allSubtasks: string[];
 	let boardBtnIndex = 1;
-	let newBoard = false
+	let newBoard = false;
+	$: loading = false;
 	// $: console.log(newBoard)
 	let numberOfSubtask = [
 		{
@@ -66,40 +79,20 @@
 	function deleteSubTask(id: number) {
 		numberOfSubtask = numberOfSubtask.filter((item) => item.id !== id);
 		id = 1;
-		
+
 		for (let i = 0; i < numberOfSubtask.length; i++) {
 			numberOfSubtask[i].id = i + 1;
 		}
 	}
-	
-	
-	$: console.log(allSubtasks)
-	
-	
-	async function getBord () {
-		let data  = await  pb.collection('boards').getList()
-	return data
 
+	function boardChanged() {}
+
+	$: if (record.length) {
+		setTimeout(() => {
+			boardModal = false;
+		}, 1000);
 	}
-
-	const boardForm:SubmitFunction = () => {
-
-	}
-	
-
-
-
-	
-		
-
-
-
-
-	
-
 </script>
-
-
 
 <main class="grid grid-cols-12 grid-rows-6 h-screen w-screen bg-[#f4ecf1] relative">
 	<header
@@ -117,7 +110,13 @@
 				>
 
 				<Modal bind:open={addTaskModal} size="xs" autoclose={false} class="w-full">
-					<form use:enhance class="flex flex-col space-y-6" action="/tasks?/createTask" method="POST">
+					<form
+						use:enhance
+						class="flex flex-col space-y-6"
+						action="/tasks?/createTask"
+						method="POST"
+					>
+						<input type="hidden" name="boardId" value={$page.params.task} />
 						<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add New Task</h3>
 						<Label class="space-y-2">
 							<span>Title</span>
@@ -133,10 +132,10 @@
 							{#each numberOfSubtask as item, idx (item.id)}
 								<div class="flex items-center gap-1">
 									<Input bind:group={allSubtasks} name={'subtask' + (idx + 1)} />
-									<Button 
+									<Button
 										on:click={() => {
 											deleteSubTask(item.id);
-										}}  
+										}}
 										outline><X class="h-4 w-4" /></Button
 									>
 								</div>
@@ -193,34 +192,51 @@
 			</div>
 			<nav class="mt-2">
 				<ul class="flex flex-col gap-1">
-					{#await getBord()}
-						<!-- promise is pending -->
-						....
-					{:then data}
-						<!-- promise was fulfilled -->
-						{#each data.items as item, idx}
-							<li>
-								<Button href="/tasks/{item.id}" color={$page.params.task === item.id? 'purple' : 'alternative'} class="w-full gap-1 justify-start">
-									<LayoutGrid class="text-inherit h-4 w-4" /> {item.name}
-								</Button>
-							</li>
-						{/each}
-					{/await}
-					
+					<!-- promise was fulfilled -->
+					{#each record as item, idx}
+						<li>
+							<Button
+								href="/tasks/{item.id}"
+								color={$page.params.task === item.id ? 'purple' : 'alternative'}
+								class="w-full gap-1 justify-start"
+							>
+								<LayoutGrid class="text-inherit h-4 w-4" />
+								{item.name}
+							</Button>
+						</li>
+					{/each}
 				</ul>
-			
-						<Button type="button" on:click={() => {boardModal = true}} class="w-full mt-4" outline>
-							<Plus class="h-4 w-4 mr-1"/> Add New Board
-						</Button>
 
-						<Modal bind:open={boardModal} size="xs" autoclose={false} class="w-full">
-							<form   class="flex flex-col space-y-6" action="/tasks?/createBoard" method="POST">
-								<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create New Board</h3>
-								<Label class="space-y-2">
-									<span>Title</span>
-									<Input type="text" name="name" placeholder="e.g Marketing Plan" required />
-								</Label>
-								<!-- <Label class="space-y-2">
+				<Button
+					type="button"
+					on:click={() => {
+						boardModal = true;
+					}}
+					class="w-full mt-4"
+					outline
+				>
+					<Plus class="h-4 w-4 mr-1" /> Add New Board
+				</Button>
+
+				<Modal bind:open={boardModal} size="xs" autoclose={false} class="w-full">
+					<form
+						use:enhance
+						class="flex flex-col space-y-6"
+						action="/tasks?/createBoard"
+						method="POST"
+					>
+						<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create New Board</h3>
+						<Label class="space-y-2">
+							<span>Title</span>
+							<Input
+								type="text"
+								name="name"
+								placeholder="e.g Marketing Plan"
+								bind:value={boardValue}
+								required
+							/>
+						</Label>
+						<!-- <Label class="space-y-2">
 									<span>Your password</span>
 									<Input type="password" name="password" placeholder="•••••" required />
 								</Label>
@@ -228,26 +244,23 @@
 										<Checkbox>Remember me</Checkbox>
 										<a href="/" class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500">Lost password?</a>
 								</div> -->
-								<Button type="submit" class="w-full1">Create</Button>
-									<!-- <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
+						<Button type="submit" class="w-full1">Create</Button>
+						<!-- <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
 										Not registered? <a href="/" class="text-primary-700 hover:underline dark:text-primary-500">Create account</a>
 									</div> -->
-							</form>
-						</Modal>
-
-			
+					</form>
+				</Modal>
 			</nav>
 			<div class="w-full mx-1 flex items-center justify-center absolute bottom-4">
 				<DarkMode class="text-md  ">
 					<svelte:fragment slot="lightIcon">
 						<div class="flex items-center gap-1">
-							<Sun class="h-4 w-4 "/> Light
-
+							<Sun class="h-4 w-4 " /> Light
 						</div>
 					</svelte:fragment>
 					<svelte:fragment slot="darkIcon">
 						<div class="flex items-center gap-1">
-							<Moon  class="h-4 w-4" /> Dark
+							<Moon class="h-4 w-4" /> Dark
 						</div>
 					</svelte:fragment>
 				</DarkMode>
@@ -257,7 +270,10 @@
 
 	<!-- END ASIDE -->
 
-	<section class:h-sidebar={!sidebar} class=" col-start-3 col-end-13 row-start-2 row-end-7 grid grid-cols-3">
+	<section
+		class:h-sidebar={!sidebar}
+		class=" col-start-3 col-end-13 row-start-2 row-end-7 grid grid-cols-3"
+	>
 		<!-- <div class="p-5">
 			<header class="flex items-center gap-1">
 				<span class="h-4 w-4 rounded-full bg-purple-600" />
@@ -291,7 +307,7 @@
 			</div>
 		</div> -->
 
-		<slot/>
+		<slot />
 	</section>
 
 	<div class="absolute right-2 bottom-2">
@@ -316,8 +332,6 @@
 </main>
 
 <style>
-	
-
 	.h-sidebar {
 		grid-column-start: 1;
 	}

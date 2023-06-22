@@ -1,10 +1,9 @@
-import {currentUser, pb} from '$lib/pocketbase.js' 
+import { currentUser, pb } from '$lib/pocketbase.js';
 
-
-pb.authStore.loadFromCookie(document.cookie)
+pb.authStore.loadFromCookie(document.cookie);
 
 pb.authStore.onChange(() => {
-  currentUser.set(pb.authStore.model)
+	currentUser.set(pb.authStore.model);
 
-  document.cookie = pb.authStore.exportToCookie({httpOnly: false})
-})
+	document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
+});

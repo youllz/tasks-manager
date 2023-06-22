@@ -1,66 +1,81 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types.js';
-import { pb } from '$lib/pocketbase.js';
 
-
-export const load = (async ({locals}) => {
-
-   
-    
-    
-    return {
-     
-    };
+export const load: PageServerLoad = (async ({ locals }) => {
+	// return {
+	// };
 }) satisfies PageServerLoad;
 
-
 export const actions: Actions = {
-    createBoard: async ({request, locals}) => {
-        const data = Object.fromEntries(await request.formData()) as Record<string,string>
-        // console.log(data)
+	createBoard: async ({ request, locals, url }) => {
+		const data = Object.fromEntries(await request.formData()) as Record<string, string>;
+		// console.log(url);
+		const fromUrl = url.pathname + url.search;
 
-        let boardData
+		let boardData;
 
-        try {
-             boardData =  await locals.pb.collection('boards').create(data)
-            console.log(boardData)
-        } catch (err:any) {
-            console.log("Error", err)
-            throw error(err.status, err.message)
+		try {
+			boardData = await locals.pb.collection('boards').create(data);
+		} catch (err: any) {
+			console.log('Error', err);
+			throw error(err.status, err.message);
+		}
 
-        }
+		let allboard = await locals.pb.collection('boards').getList();
+		let id = allboard.items.at(-1)?.id;
 
-        let allboard = await pb.collection('boards').getList()
-        let id = allboard.items.at(-1)?.id
+		throw redirect(303, `/tasks/${boardData.id}?redirecTo=${fromUrl}`);
 
-        throw redirect(303, `/tasks/${boardData.id}`)
+		// return fail(402, {
+		//     message: "board create"
+		// })
+	},
 
-    },
+	createTask: async ({ request, locals, url }) => {
+		const data = Object.fromEntries(await request.formData()) as Record<string, string>;
+		// console.log(data)
 
-    createTask: async ({request, locals}) => {
-        const data = Object.fromEntries(await request.formData()) as Record<string,string>
-        console.log(data)
+		let values = Object.values(data);
+		let keyLenght = values.length;
 
-        let values = Object.values(data)
-        let keyLenght = values.length
+		const statusIdx = values.indexOf('status');
+		const el = values.splice(statusIdx, keyLenght)[0];
+		values.splice(3, 0, el);
+		let subTasks = values.slice(4);
+		// console.log(subTasks)
+		const subTasksId = Array(subTasks.length);
+		
+		let taskRecord
 
-        const statusIdx = values.indexOf('status')
-        const el =  values.splice(statusIdx, keyLenght)[0]
-        values.splice(2, 0, el)
-        let subTasks = values.slice(3)
+		try {
+			 taskRecord = await locals.pb
+				.collection('tasks')
+				.create({
+					title: data.title,
+					description: data.description,
+					status: data.status,
+					boards: data.boardId
+				});
 
-        try {
-            await locals.pb.collection('tasks').create({title: data.title, description: data.description, status: data.status, boards: 'dpj856vukz8b7ai'})
-            for(let i = 0; i < subTasks.length; i++) {
-                await locals.pb.collection('subtasks').create({title: subTasks[i], done: false})
-            }
-        } catch (err:any) {
-            console.log('Error', err)
-            throw error(err.status, err.message)
-        }
-       
-        
-        
-    }
-        
+			
+		} catch (err: any) {
+			console.log('Error', err);
+			throw error(err.status, err.message);
+		}
+
+		try {
+			for (let i = 0; i < subTasks.length; i++) {
+				subTasksId[i] = await locals.pb
+				.collection('subtasks')
+				.create({ title: subTasks[i], done: false, tasks: taskRecord.id });
+			}
+			
+		
+		 locals.pb
+			.collection('tasks')
+			.update(taskRecord.id, { substasks: subTasksId.map((item) => item.id) });
+		} catch(err) {
+			console.log('Error', err)
+		}
+	}
 };

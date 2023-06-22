@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import {
 		Button,
 		Modal,
@@ -11,6 +11,18 @@
 		Dropdown
 	} from 'flowbite-svelte';
 	let clickOutsideModal = false;
+
+	interface Subtask {
+		id: string;
+		collectionId: string;
+		collectionName: string;
+		created: string;
+		updated: string;
+		title: string;
+		done: boolean;
+		tasks: string;
+	}
+
 	let status = [
 		{
 			value: 'todo',
@@ -32,24 +44,34 @@
 <!-- <Button on:click={() => clickOutsideModal = true}>Default modal</Button> -->
 
 <Card on:click={() => (clickOutsideModal = true)} class="w-full cursor-pointer">
-	<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-		Noteworthy technology acquisitions 2021
+	<h5  class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+		<slot name="title">
+			Lorem ipsum dolor sit amet consectetur adipisicin
+		</slot>
 	</h5>
 	<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
-		Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological
-		order.
+		<slot name="desc">
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. In harum laboriosam laborum
+			dignissimos. Recusandae quis cum perspiciatis, facilis quibusdam maiores nulla minus ullam
+			rem praesentium voluptatibus laboriosam molestiae pariatur qua
+		</slot>
 	</p>
 </Card>
 
 <Modal size="sm" title="Terms of Service" bind:open={clickOutsideModal} autoclose outsideclose>
 	<div class="mb-4 flex flex-col gap-2">
 		<h3 class="text-2xl font-bold text-gray-900">
-			Lorem ipsum dolor sit amet consectetur adipisicin
+		<slot name="title">
+				Lorem ipsum dolor sit amet consectetur adipisicin
+			</slot>
 		</h3>
+
 		<p>
-			Lorem ipsum dolor sit amet consectetur adipisicing elit. In harum laboriosam laborum
-			dignissimos. Recusandae quis cum perspiciatis, facilis quibusdam maiores nulla minus ullam rem
-			praesentium voluptatibus laboriosam molestiae pariatur quaerat!
+		<slot name="desc">
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. In harum laboriosam laborum
+				dignissimos. Recusandae quis cum perspiciatis, facilis quibusdam maiores nulla minus ullam
+				rem praesentium voluptatibus laboriosam molestiae pariatur quaerat!
+			</slot>
 		</p>
 	</div>
 
