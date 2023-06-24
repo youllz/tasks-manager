@@ -9,7 +9,6 @@ export const load: PageServerLoad = (async () => {
 export const actions: Actions = {
 	createBoard: async ({ request, locals, url }) => {
 		const data = Object.fromEntries(await request.formData()) as Record<string, string>;
-		// console.log(url);
 		const fromUrl = url.pathname + url.search;
 
 		let boardData;

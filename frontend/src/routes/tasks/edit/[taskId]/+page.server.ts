@@ -1,5 +1,64 @@
-import type { PageServerLoad } from './$types';
+import { error } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types.js';
+import type { Record } from 'pocketbase';
 
-export const load = (async () => {
-    return {};
+export const load = (async ({params, locals}) => {
+
+    let data:Record
+    const getData = async() => {
+        try {
+             data = await locals.pb.collection('tasks').getOne(params.taskId)
+             
+           
+            return data
+        } catch (err:any) {
+            console.log('Error: ', err)
+            throw error(err.status, err.message)
+        }
+    }
+
+
+    const getSubtask = async () => {
+        const subtasksData:Record[] = new Array(data.subtasks.length)
+
+        try {
+            
+            if(subtasksData) {
+                for(let i = 0; i < subtasksData.length; i++) {
+                 subtasksData[i] =   await locals.pb.collection('subtasks').getOne(data.subtasks[i])
+                }
+            }
+        } catch (err) {
+            console.log('Error: ',err)
+        }
+
+
+        return subtasksData
+    }
+    
+    return {
+        editData: {
+            task: structuredClone(await getData()) as Record,
+            subtask: structuredClone(await getSubtask()) as Record[]
+        }
+    };
 }) satisfies PageServerLoad;
+
+
+export const actions: Actions = {
+    deleteSubtask: async({locals, request, url}) => {
+        const id = url.searchParams.get('id')
+
+       
+        if(id) {
+            
+            try {
+                await locals.pb.collection('subtasks').delete(id)
+            } catch (err) {
+                console.log('Error: ',err)
+            }
+            
+        }
+       
+    }
+};

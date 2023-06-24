@@ -283,7 +283,7 @@
 
 	<section
 		class:h-sidebar={!sidebar}
-		class=" col-start-3 col-end-13 row-start-2 row-end-7 grid grid-cols-3"
+		class=" "
 	>
 		<!-- <div class="p-5">
 			<header class="flex items-center gap-1">
