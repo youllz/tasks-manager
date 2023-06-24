@@ -1,7 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types.js';
 
-export const load: PageServerLoad = (async ({ locals }) => {
+export const load: PageServerLoad = (async () => {
 	// return {
 	// };
 }) satisfies PageServerLoad;
@@ -21,8 +21,7 @@ export const actions: Actions = {
 			throw error(err.status, err.message);
 		}
 
-		let allboard = await locals.pb.collection('boards').getList();
-		let id = allboard.items.at(-1)?.id;
+		
 
 		throw redirect(303, `/tasks/${boardData.id}?redirecTo=${fromUrl}`);
 
@@ -31,7 +30,7 @@ export const actions: Actions = {
 		// })
 	},
 
-	createTask: async ({ request, locals, url }) => {
+	createTask: async ({ request, locals }) => {
 		const data = Object.fromEntries(await request.formData()) as Record<string, string>;
 		// console.log(data)
 
@@ -67,13 +66,13 @@ export const actions: Actions = {
 			for (let i = 0; i < subTasks.length; i++) {
 				subTasksId[i] = await locals.pb
 				.collection('subtasks')
-				.create({ title: subTasks[i], done: false, tasks: taskRecord.id });
+				.create({ title: subTasks[i], done: 'off', tasks: taskRecord.id });
 			}
 			
 		
 		 locals.pb
 			.collection('tasks')
-			.update(taskRecord.id, { substasks: subTasksId.map((item) => item.id) });
+			.update(taskRecord.id, { subtasks: subTasksId.map((item) => item.id) });
 		} catch(err) {
 			console.log('Error', err)
 		}

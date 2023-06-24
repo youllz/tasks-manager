@@ -32,14 +32,14 @@
 	import type { PageServerData, SubmitFunction } from './$types.js';
 	import type { ListResult, Record } from 'pocketbase';
 	import { onMount } from 'svelte';
-	import { applyAction, enhance } from '$app/forms';
+	import {  enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
 
 	export let data;
 	
 
-	$: ({ record } = data);
+	$: ({ recordData } = data);
 	let addTaskModal = false;
 	let boardModal = false;
 	let boardValue = '';
@@ -47,6 +47,7 @@
 	let headerMenuPlacemant = 'bottom';
 	let sidebar = true;
 	let allSubtasks: string[];
+	let record: Record[] = []
 	let boardBtnIndex = 1;
 	let newBoard = false;
 	$: loading = false;
@@ -85,9 +86,19 @@
 		}
 	}
 
-	function boardChanged() {}
+	function setRecordData() {
+		if(typeof(recordData) != 'undefined') {
+			record = recordData
+		}
+	}
 
-	$: if (record.length) {
+	$: if(recordData) {
+		setRecordData()
+	}
+
+
+
+	$: if (record?.length ) {
 		setTimeout(() => {
 			boardModal = false;
 		}, 1000);

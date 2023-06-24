@@ -1,19 +1,42 @@
 <script lang="ts">
 	import TaskCards from '$lib/components/TaskCards.svelte';
 	import { page } from '$app/stores';
+	import type {Record} from 'pocketbase'
 
 	export let data;
-	$: console.log(data);
+	// $: console.log(data);
 
 
 	$: ({allTasks} = data)
 
+	
+
 	// let pageTasks = allTasks.filter((item:any) => item.boards === $page.params.task)
 	// console.log(pageTasks)
 
-	$: todo = allTasks.filter((item:any) => item.status === 'todo')
-	$: doing = allTasks.filter((item:any) => item.status === 'doing')
-	$: done = allTasks.filter((item:any) => item.status === 'done')
+	
+
+
+	$: todoData = allTasks?.filter((item) => item.status === 'todo')
+	$: doingData = allTasks?.filter((item) => item.status === 'doing')
+	$: doneData = allTasks?.filter((item) => item.status === 'done')
+
+	let todo:Record[] = []
+	let doing:Record[] = []
+	let done:Record[] = []
+
+	function setData() {
+		if(typeof(todoData) != 'undefined' ) todo = todoData
+		if(typeof(doingData) != 'undefined' ) doing = doingData
+		if(typeof(doneData) != 'undefined' ) done = doneData 
+
+		// console.log(todo)
+
+	}
+
+	$: if(allTasks) {
+		setData()
+	}
 
 	
 
@@ -27,7 +50,7 @@
 		<span>TODO</span>
 	</header>
 	<div class="flex flex-col gap-2">
-		{#if todo.length === 0}
+		{#if  todo.length === 0}
 
 		<div class="w-full h-[300px]  flex items-center justify-center ">
 
@@ -38,7 +61,8 @@
 			{:else}
 			{#each todo as items}
 				
-			<TaskCards >
+			<TaskCards subtaskId={items.subtasks} taskId={items.id} >
+				{console.log(items)}
 				<span slot="title">
 					{items.title}
 				</span>
@@ -74,7 +98,16 @@
 		{:else}
 		{#each doing as items}
 			
-		<TaskCards />
+		<TaskCards subtaskId={items.subtasks} taskId={items.id} >
+			<span slot="title">
+				{items.title}
+			</span>
+			<span slot="desc">
+				{items.description}
+			</span>
+
+
+		</TaskCards>
 		{/each}
 	{/if}
 		
@@ -97,7 +130,16 @@
 		{:else}
 		{#each done as items}
 			
-		<TaskCards />
+		<TaskCards subtaskId={items.subtasks} taskId={items.id}>
+			<span slot="title">
+				{items.title}
+			</span>
+			<span slot="desc">
+				{items.description}
+			</span>
+
+
+		</TaskCards>
 		{/each}
 	{/if}
 		

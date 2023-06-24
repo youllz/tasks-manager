@@ -14,6 +14,6 @@ export const load = (async ({ locals }) => {
 	};
 
 	return {
-		record: structuredClone(await getAllBoard())
+		recordData: structuredClone(await getAllBoard())
 	};
 }) satisfies LayoutServerLoad;
