@@ -10,7 +10,7 @@ export const load: PageServerLoad = (async ({ params, locals }) => {
 				expand: boardId
 			});
 			// console.log('taskREcird:',taskRecord)
-			return taskRecord.filter((item) => item.boards === boardId)
+			return taskRecord.filter((item) => item.boards === boardId);
 		} catch (err) {
 			console.log('Error', err);
 		}
@@ -22,47 +22,43 @@ export const load: PageServerLoad = (async ({ params, locals }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	saveTask: async({request, locals}) => {
-		const formData = Object.fromEntries(await request.formData()) as Record<string,string>
+	saveTask: async ({ request, locals }) => {
+		const formData = Object.fromEntries(await request.formData()) as Record<string, string>;
 
 		function extratData() {
-			let data = structuredClone(formData)
-			delete data['status']
-			delete data['taskId']
-			let dataKeys = Object.keys(data)
-			let dataValue = Object.values(data) as string[]
-
+			let data = structuredClone(formData);
+			delete data['status'];
+			delete data['taskId'];
+			let dataKeys = Object.keys(data);
+			let dataValue = Object.values(data) as string[];
 
 			return {
 				dataKeys,
 				dataValue
-			}
-			
+			};
 		}
 
-		
-		const data = extratData()
+		const data = extratData();
 
 		try {
-			await locals.pb.collection('tasks').update(formData.taskId,{status: formData.status})
-			for(let i = 0; i < data.dataKeys.length; i++) {
-				await locals.pb.collection('subtasks').update(data.dataKeys[i], {done: data.dataValue[i]})
+			await locals.pb.collection('tasks').update(formData.taskId, { status: formData.status });
+			for (let i = 0; i < data.dataKeys.length; i++) {
+				await locals.pb
+					.collection('subtasks')
+					.update(data.dataKeys[i], { done: data.dataValue[i] });
 			}
 		} catch (err) {
-			console.log('Error: ', err)
-			 
+			console.log('Error: ', err);
 		}
-
 	},
 
-	deleteTask: async({request, locals}) => {
-		const formData = Object.fromEntries(await request.formData()) as Record<string,string>
+	deleteTask: async ({ request, locals }) => {
+		const formData = Object.fromEntries(await request.formData()) as Record<string, string>;
 
 		try {
-			await locals.pb.collection('tasks').delete(formData.taskId)
+			await locals.pb.collection('tasks').delete(formData.taskId);
 		} catch (err) {
-			console.log('Error: ',err)
-
+			console.log('Error: ', err);
 		}
 	}
 };

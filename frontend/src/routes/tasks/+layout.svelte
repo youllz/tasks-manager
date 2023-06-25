@@ -32,12 +32,11 @@
 	import type { PageServerData, SubmitFunction } from './$types.js';
 	import type { ListResult, Record } from 'pocketbase';
 	import { onMount } from 'svelte';
-	import {  enhance } from '$app/forms';
+	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
 
 	export let data;
-	
 
 	$: ({ recordData } = data);
 	let addTaskModal = false;
@@ -47,7 +46,7 @@
 	let headerMenuPlacemant = 'bottom';
 	let sidebar = true;
 	let allSubtasks: string[];
-	let record: Record[] = []
+	let record: Record[] = [];
 	let boardBtnIndex = 1;
 	let newBoard = false;
 	$: loading = false;
@@ -87,18 +86,16 @@
 	}
 
 	function setRecordData() {
-		if(typeof(recordData) != 'undefined') {
-			record = recordData
+		if (typeof recordData != 'undefined') {
+			record = recordData;
 		}
 	}
 
-	$: if(recordData) {
-		setRecordData()
+	$: if (recordData) {
+		setRecordData();
 	}
 
-
-
-	$: if (record?.length ) {
+	$: if (record?.length) {
 		setTimeout(() => {
 			boardModal = false;
 		}, 1000);
@@ -283,7 +280,7 @@
 
 	<section
 		class:h-sidebar={!sidebar}
-		class="col-start-3 col-end-13 row-start-2 row-end-7 overflow-x-hidden "
+		class="col-start-3 col-end-13 row-start-2 row-end-7 overflow-x-hidden"
 	>
 		<!-- <div class="p-5">
 			<header class="flex items-center gap-1">

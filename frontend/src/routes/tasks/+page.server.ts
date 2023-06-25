@@ -9,7 +9,7 @@ export const load: PageServerLoad = (async () => {
 export const actions: Actions = {
 	createBoard: async ({ request, locals }) => {
 		const data = Object.fromEntries(await request.formData()) as Record<string, string>;
-		
+
 		let boardData;
 
 		try {
@@ -18,8 +18,6 @@ export const actions: Actions = {
 			console.log('Error', err);
 			throw error(err.status, err.message);
 		}
-
-		
 
 		throw redirect(303, `/tasks/${boardData.id}`);
 
@@ -41,20 +39,16 @@ export const actions: Actions = {
 		let subTasks = values.slice(4);
 		// console.log(subTasks)
 		const subTasksId = Array(subTasks.length);
-		
-		let taskRecord
+
+		let taskRecord;
 
 		try {
-			 taskRecord = await locals.pb
-				.collection('tasks')
-				.create({
-					title: data.title,
-					description: data.description,
-					status: data.status,
-					boards: data.boardId
-				});
-
-			
+			taskRecord = await locals.pb.collection('tasks').create({
+				title: data.title,
+				description: data.description,
+				status: data.status,
+				boards: data.boardId
+			});
 		} catch (err: any) {
 			console.log('Error', err);
 			throw error(err.status, err.message);
@@ -63,16 +57,15 @@ export const actions: Actions = {
 		try {
 			for (let i = 0; i < subTasks.length; i++) {
 				subTasksId[i] = await locals.pb
-				.collection('subtasks')
-				.create({ title: subTasks[i], done: 'off', tasks: taskRecord.id });
+					.collection('subtasks')
+					.create({ title: subTasks[i], done: 'off', tasks: taskRecord.id });
 			}
-			
-		
-		 locals.pb
-			.collection('tasks')
-			.update(taskRecord.id, { subtasks: subTasksId.map((item) => item.id) });
-		} catch(err) {
-			console.log('Error', err)
+
+			locals.pb
+				.collection('tasks')
+				.update(taskRecord.id, { subtasks: subTasksId.map((item) => item.id) });
+		} catch (err) {
+			console.log('Error', err);
 		}
 	}
 };

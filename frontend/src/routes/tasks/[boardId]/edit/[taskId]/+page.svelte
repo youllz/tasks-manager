@@ -16,7 +16,10 @@
 	<Card class="min-w-[40vw]">
 		<form use:enhance class="flex flex-col space-y-6" method="POST">
 			<div class="flex items-center justify-between mb-2">
-				<a href="/tasks/{$page.params.boardId}" class="text-xl font-medium text-gray-900 dark:text-white"><MoveLeft /></a>
+				<a
+					href="/tasks/{$page.params.boardId}"
+					class="text-xl font-medium text-gray-900 dark:text-white"><MoveLeft /></a
+				>
 				<h1 class="font-bold">Edit Task</h1>
 			</div>
 			<Label class="space-y-2">
@@ -49,7 +52,7 @@
 			<Button outline on:click={() => (newSubTask = true)}>Add new Subtask</Button>
 
 			<Modal bind:open={newSubTask} size="xs" autoclose={false} class="w-full">
-				<form use:enhance class="flex flex-col space-y-6"  method="POST">
+				<form use:enhance class="flex flex-col space-y-6" method="POST">
 					<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
 						Sign in to our platform
 					</h3>
@@ -57,9 +60,9 @@
 						<span>Title</span>
 						<Input type="text" name="subtask" autocomplete="off" required />
 					</Label>
-					<input type="hidden" name="taskId" value={$page.params.taskId}>
-            <Button type="submit" formaction="?/createSubtask"  class="w-full1">create</Button>
-						<!-- <Label class="space-y-2">
+					<input type="hidden" name="taskId" value={$page.params.taskId} />
+					<Button type="submit" formaction="?/createSubtask" class="w-full1">create</Button>
+					<!-- <Label class="space-y-2">
 							<span>Your password</span>
 							<Input type="password" name="password" placeholder="•••••" required />
 						</Label>
@@ -77,11 +80,12 @@
 							class="text-primary-700 hover:underline dark:text-primary-500">Create account</a
 							>
 						</div> -->
-					</form>
-				</Modal>
-				<!-- end modal -->
-				<Button type="submit" formaction="?/editTask" class="w-full"><Edit class="w-4 h-4 mr-1" /> Edit</Button>
-
+				</form>
+			</Modal>
+			<!-- end modal -->
+			<Button type="submit" formaction="?/editTask" class="w-full"
+				><Edit class="w-4 h-4 mr-1" /> Edit</Button
+			>
 		</form>
 	</Card>
 </div>
