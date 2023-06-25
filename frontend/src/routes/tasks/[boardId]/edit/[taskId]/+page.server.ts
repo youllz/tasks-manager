@@ -60,5 +60,34 @@ export const actions: Actions = {
             
         }
        
+    },
+    createSubtask: async({request, locals}) => {
+        const formData = Object.fromEntries(await request.formData()) as {subtask:string, taskId:string}
+        console.log(formData)
+        const {subtask, taskId} = formData
+      
+
+        try {
+            const subtaskRecord =  await locals.pb.collection('subtasks').create({ title: subtask, done: 'off'})
+            const taskRecord = await locals.pb.collection('tasks').getOne(taskId)
+            let subtasksId = taskRecord.subtasks as string[]
+            subtasksId.push(subtaskRecord.id)
+
+            await locals.pb.collection('tasks').update(taskId, {subtasks: subtasksId})
+            
+        } catch (err) {
+            console.log('Error: ', err)
+        }
+    },
+
+    editTask: async ({locals,request, params}) => {
+        const formData = Object.fromEntries(await request.formData()) as {title:string, description:string}
+        try {
+            await locals.pb.collection('tasks').update(params.taskId,{title:formData.title, description:formData.description})
+        } catch (err) {
+            console.log('Error', err)
+        }
+
+        
     }
 };

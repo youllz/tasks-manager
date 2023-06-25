@@ -136,7 +136,7 @@
 	
 		<div class="flex flex-col gap-1">
 		<Button type="submit" formaction="?/saveTask"  color="alternative" class="w-full"> <Save class="h-4 w-4 mr-2"/> save</Button>
-		<Button type="button"  href="/tasks/edit/{taskId}" color="alternative" class="w-full"> <Edit class="h-4 w-4 mr-2"/> edit</Button>
+		<Button type="button"  href="/tasks/{$page.params.boardId}/edit/{taskId}" color="alternative" class="w-full"> <Edit class="h-4 w-4 mr-2"/> edit</Button>
 		<Button type="submit"  formaction="?/deleteTask" color="red" outline class="w-full"> <Trash class="h-4 w-4 mr-2"/> delete</Button>
 		</div>
 	</form>

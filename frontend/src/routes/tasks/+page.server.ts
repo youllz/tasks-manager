@@ -7,10 +7,9 @@ export const load: PageServerLoad = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	createBoard: async ({ request, locals, url }) => {
+	createBoard: async ({ request, locals }) => {
 		const data = Object.fromEntries(await request.formData()) as Record<string, string>;
-		const fromUrl = url.pathname + url.search;
-
+		
 		let boardData;
 
 		try {
@@ -22,7 +21,7 @@ export const actions: Actions = {
 
 		
 
-		throw redirect(303, `/tasks/${boardData.id}?redirecTo=${fromUrl}`);
+		throw redirect(303, `/tasks/${boardData.id}`);
 
 		// return fail(402, {
 		//     message: "board create"

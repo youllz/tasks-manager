@@ -208,7 +208,7 @@
 						<li>
 							<Button
 								href="/tasks/{item.id}"
-								color={$page.params.task === item.id ? 'purple' : 'alternative'}
+								color={$page.params.boardID === item.id ? 'purple' : 'alternative'}
 								class="w-full gap-1 justify-start"
 							>
 								<LayoutGrid class="text-inherit h-4 w-4" />
@@ -283,7 +283,7 @@
 
 	<section
 		class:h-sidebar={!sidebar}
-		class=" "
+		class="col-start-3 col-end-13 row-start-2 row-end-7 overflow-x-hidden "
 	>
 		<!-- <div class="p-5">
 			<header class="flex items-center gap-1">

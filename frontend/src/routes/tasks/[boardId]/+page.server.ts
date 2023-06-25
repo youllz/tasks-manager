@@ -2,7 +2,7 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = (async ({ params, locals }) => {
-	const boardId = params.task;
+	const boardId = params.boardId;
 
 	const getData = async () => {
 		try {
