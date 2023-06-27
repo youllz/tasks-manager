@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types.js';
 import type { Record } from 'pocketbase';
 
@@ -40,7 +40,7 @@ export const load = (async ({ params, locals }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	deleteSubtask: async ({ locals, request, url }) => {
+	deleteSubtask: async ({ locals, url }) => {
 		const id = url.searchParams.get('id');
 
 		if (id) {
@@ -84,6 +84,7 @@ export const actions: Actions = {
 				.update(params.taskId, { title: formData.title, description: formData.description });
 		} catch (err) {
 			console.log('Error', err);
+			return fail(413)
 		}
 	}
 };

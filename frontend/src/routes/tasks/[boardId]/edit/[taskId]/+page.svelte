@@ -1,20 +1,50 @@
 <script lang="ts">
 	import { Edit, Plus, X, MoveLeft } from 'lucide-svelte';
 	import type { PageData } from './$types.js';
-	import { Card, Button, Label, Input, Checkbox, Textarea, Modal } from 'flowbite-svelte';
+	import { Card, Button, Label, Input, Checkbox, Textarea, Modal, Toast } from 'flowbite-svelte';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import toast, { Toaster } from 'svelte-french-toast';
 
 	export let data: PageData;
-	//    $: console.log(data.editData)
+
+	type Satus = "error" | "success" | undefined
+
+	let editForm: Satus 
 
 	$: ({ task, subtask } = data.editData);
 	let newSubTask = false;
+
+	let formSubmit:SubmitFunction  = () => {
+
+		return async ({result, update}) => {
+			console.log(result.type)
+			switch (result.type) {
+				case "success":
+					toast.success("the task has been updated");
+					await update({reset: false})
+					break;
+					case "failure":
+					toast.error("an error its produced the task has not been updated");
+						
+				default:
+					break;
+			}
+
+		}
+	}
+
+
+	
 </script>
 
-<div class="w-full flex flex-col items-center justify-center">
+<Toaster />
+<div class="w-full flex flex-col items-center justify-center relative">
+
+
 	<Card class="min-w-[40vw]">
-		<form use:enhance class="flex flex-col space-y-6" method="POST">
+		<form use:enhance={formSubmit} class="flex flex-col space-y-6" method="POST">
 			<div class="flex items-center justify-between mb-2">
 				<a
 					href="/tasks/{$page.params.boardId}"
@@ -62,24 +92,6 @@
 					</Label>
 					<input type="hidden" name="taskId" value={$page.params.taskId} />
 					<Button type="submit" formaction="?/createSubtask" class="w-full1">create</Button>
-					<!-- <Label class="space-y-2">
-							<span>Your password</span>
-							<Input type="password" name="password" placeholder="•••••" required />
-						</Label>
-						<div class="flex items-start">
-						<Checkbox>Remember me</Checkbox>
-						<a
-							href="/"
-							class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500"
-							>Lost password?</a
-							>
-						</div>
-						<div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-							Not registered? <a
-							href="/"
-							class="text-primary-700 hover:underline dark:text-primary-500">Create account</a
-							>
-						</div> -->
 				</form>
 			</Modal>
 			<!-- end modal -->

@@ -21,7 +21,6 @@
 	export let subtaskId: string[] = [];
 	export let taskId: string;
 
-	$: console.log($page.params);
 
 	let selectValue = 'todo';
 

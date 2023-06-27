@@ -1,7 +1,6 @@
 <script lang="ts">
 	import {
 		Button,
-		Checkbox,
 		Input,
 		Label,
 		Modal,
@@ -19,22 +18,18 @@
 		X,
 		Settings,
 		LogOut,
-		ChevronLeft,
 		Eye,
 		EyeOff,
 		Sun,
 		Moon
 	} from 'lucide-svelte';
-	import TaskCards from '$lib/components/TaskCards.svelte';
 	import '../../app.postcss';
 	import '../../app.css';
-	import { pb } from '$lib/pocketbase.js';
-	import type { PageServerData, SubmitFunction } from './$types.js';
-	import type { ListResult, Record } from 'pocketbase';
-	import { onMount } from 'svelte';
+	import type { SubmitFunction } from './$types.js';
+	import type { Record } from 'pocketbase';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import { invalidateAll } from '$app/navigation';
+	import toast, { Toaster } from 'svelte-french-toast';
 
 	export let data;
 
@@ -47,10 +42,7 @@
 	let sidebar = true;
 	let allSubtasks: string[];
 	let record: Record[] = [];
-	let boardBtnIndex = 1;
-	let newBoard = false;
-	$: loading = false;
-	// $: console.log(newBoard)
+	let headerTitle: string = ''
 	let numberOfSubtask = [
 		{
 			id: id++
@@ -98,17 +90,42 @@
 	$: if (record?.length) {
 		setTimeout(() => {
 			boardModal = false;
-		}, 1000);
+		}, 500);
+	}
+
+	const formSubmit:SubmitFunction = () => {
+
+
+		return async ({result, update}) => {
+			switch (result.type) {
+				case "success":
+					toast.success('the task was successfully created')
+					await update({reset: true})
+					break;
+					case "failure" :
+						toast.error('error the task was not created')
+						await update({reset: false})
+				default:
+					break;
+			}
+		}
+	}
+
+	function getHeaderTitle(e:MouseEvent) {
+		const el = e.target as HTMLAnchorElement
+		headerTitle = el.innerText
 	}
 </script>
 
+<Toaster/>
 <main class="grid grid-cols-12 grid-rows-6 h-screen w-screen bg-[#f4ecf1] relative">
+	<!-- HEADER -->
 	<header
 		class:h-sidebar={!sidebar}
 		class="col-start-3 col-end-13 border-b-2 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5"
 	>
 		<div>
-			<span class="text-2xl"> item 0 </span>
+			<span class="text-2xl">{$page.url.searchParams.get('name')}</span>
 		</div>
 
 		<ul class="flex items-center gap-2">
@@ -117,14 +134,14 @@
 					><Plus class="h-4 w-4" /> Add New Task</Button
 				>
 
-				<Modal bind:open={addTaskModal} size="xs" autoclose={false} class="w-full">
+				<Modal bind:open={addTaskModal} size="xs" autoclose={false} outsideclose class="w-full">
 					<form
-						use:enhance
+						use:enhance={formSubmit}
 						class="flex flex-col space-y-6"
 						action="/tasks?/createTask"
 						method="POST"
 					>
-						<input type="hidden" name="boardId" value={$page.params.task} />
+						<input type="hidden" name="boardId" value={$page.params.boardId} />
 						<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add New Task</h3>
 						<Label class="space-y-2">
 							<span>Title</span>
@@ -134,7 +151,6 @@
 							<span> Description</span>
 							<Textarea placeholder="task description" rows="4" name="description" />
 						</Label>
-						<!-- <div> -->
 						<Label class="space-y-2">
 							<span> Subtasks </span>
 							{#each numberOfSubtask as item, idx (item.id)}
@@ -149,7 +165,6 @@
 								</div>
 							{/each}
 						</Label>
-						<!-- </div> -->
 
 						<Button on:click={addSubTask} type="button" outline class="w-full1"
 							><Plus class="h-4 w-4" /> Add New Subtask</Button
@@ -178,7 +193,7 @@
 					<DropdownItem class="  flex items-center gap-1 hover:bg-gray-300">
 						<LogOut class="h-4 w-4" /> Logout</DropdownItem
 					>
-					<!-- <DropdownItem class="  flex items-center gap-1 hover:bg-gray-300">Delete</DropdownItem> -->
+					
 				</Dropdown>
 			</li>
 		</ul>
@@ -196,24 +211,26 @@
 				<strong class="text-lg font-bold"> LOGO </strong>
 			</div>
 			<div class="text-center">
-				<small> ALL TASKS (3) </small>
+				<small> ALL BOARD ({record.length })</small>
 			</div>
-			<nav class="mt-2">
+			<nav class="mt-2 h-[400px] overflow-y-scroll" >
 				<ul class="flex flex-col gap-1">
-					<!-- promise was fulfilled -->
+				
 					{#each record as item, idx}
 						<li>
 							<Button
-								href="/tasks/{item.id}"
-								color={$page.params.boardID === item.id ? 'purple' : 'alternative'}
+								on:click={getHeaderTitle}
+								href="/tasks/{item.id}?name={item.name}"
+								color={$page.params.boardId === item.id ? 'purple' : 'alternative'}
 								class="w-full gap-1 justify-start"
 							>
 								<LayoutGrid class="text-inherit h-4 w-4" />
 								{item.name}
 							</Button>
 						</li>
-					{/each}
-				</ul>
+						{/each}
+					</ul>
+				</nav>
 
 				<Button
 					type="button"
@@ -226,7 +243,7 @@
 					<Plus class="h-4 w-4 mr-1" /> Add New Board
 				</Button>
 
-				<Modal bind:open={boardModal} size="xs" autoclose={false} class="w-full">
+				<Modal bind:open={boardModal} size="xs" autoclose={false} outsideclose class="w-full">
 					<form
 						use:enhance
 						class="flex flex-col space-y-6"
@@ -244,21 +261,11 @@
 								required
 							/>
 						</Label>
-						<!-- <Label class="space-y-2">
-									<span>Your password</span>
-									<Input type="password" name="password" placeholder="•••••" required />
-								</Label>
-								<div class="flex items-start">
-										<Checkbox>Remember me</Checkbox>
-										<a href="/" class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500">Lost password?</a>
-								</div> -->
+					
 						<Button type="submit" class="w-full1">Create</Button>
-						<!-- <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-										Not registered? <a href="/" class="text-primary-700 hover:underline dark:text-primary-500">Create account</a>
-									</div> -->
+					
 					</form>
 				</Modal>
-			</nav>
 			<div class="w-full mx-1 flex items-center justify-center absolute bottom-4">
 				<DarkMode class="text-md  ">
 					<svelte:fragment slot="lightIcon">
@@ -280,41 +287,9 @@
 
 	<section
 		class:h-sidebar={!sidebar}
-		class="col-start-3 col-end-13 row-start-2 row-end-7 overflow-x-hidden"
+		class="col-start-3 col-end-13 row-start-2 row-end-7 overflow-x-hidden relative"
 	>
-		<!-- <div class="p-5">
-			<header class="flex items-center gap-1">
-				<span class="h-4 w-4 rounded-full bg-purple-600" />
-				<span>TODO</span>
-			</header>
-			<div class="flex flex-col gap-2">
-				<TaskCards />
-				<TaskCards />
-			</div>
-		</div>
-		<div class="p-5 overflow-scroll overflow-x-hidden">
-			<header class="flex items-center gap-1">
-				<span class="h-4 w-4 rounded-full bg-blue-600" />
-				<span> DOING </span>
-			</header>
-			<div class="flex flex-col gap-2">
-				<TaskCards />
-				<TaskCards />
-				<TaskCards />
-				<TaskCards />
-				<TaskCards />
-			</div>
-		</div>
-		<div class="p-5">
-			<header class="flex items-center gap-1">
-				<span class="h-4 w-4 rounded-full bg-green-600" />
-				<span> DONE </span>
-			</header>
-			<div class="flex flex-col gap-2">
-				<TaskCards />
-			</div>
-		</div> -->
-
+		
 		<slot />
 	</section>
 
@@ -326,7 +301,7 @@
 			id="sidebar"
 			class="rounded-full absolute right-2 bottom-2"
 		>
-			<!-- <ChevronLeft class="h-4 w-4"  /> -->
+			
 			{#if sidebar}
 				<EyeOff class="h-4 w-4" />
 			{:else}

@@ -58,6 +58,7 @@
 		"flowbite-svelte": "^0.38.2",
 		"lucide-svelte": "^0.244.0",
 		"pocketbase": "^0.15.2",
+		"svelte-french-toast": "^1.0.4",
 		"tailwind-merge": "^1.13.1"
 	}
 }

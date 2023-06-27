@@ -2,7 +2,7 @@
 	import TaskCards from '$lib/components/TaskCards.svelte';
 	import { page } from '$app/stores';
 	import type { Record } from 'pocketbase';
-
+	import toast, { Toaster } from 'svelte-french-toast';
 	export let data;
 	// $: console.log(data);
 
@@ -30,8 +30,25 @@
 	$: if (allTasks) {
 		setData();
 	}
+
+	
+	$: redirectMessage = $page.url.searchParams.get('message')
+	let toastMessage: string
+
+	$: if(redirectMessage) {
+		toastMessage= redirectMessage
+	}
+
+	$: if(redirectMessage) {
+		toast.success(toastMessage)
+	}
+	
+	
+	
+
 </script>
 
+<Toaster/>
 <div class="col-start-3 col-end-13 row-start-2 row-end-7 grid grid-cols-3 w-full">
 	<div class="p-5 overflow-scroll overflow-x-hidden">
 		<header class="flex items-center gap-1">
