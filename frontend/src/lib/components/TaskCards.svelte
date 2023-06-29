@@ -64,10 +64,10 @@
 
 <Card on:click={() => (clickOutsideModal = true)} class="w-full cursor-pointer">
 	<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-		<slot name="title">Lorem ipsum dolor sit amet consectetur adipisicin</slot>
+		<slot name="card-title">Lorem ipsum dolor sit amet consectetur adipisicin</slot>
 	</h5>
 	<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
-		<slot name="desc">
+		<slot name="card-desc">
 			Lorem ipsum dolor sit amet consectetur adipisicing elit. In harum laboriosam laborum
 			dignissimos. Recusandae quis cum perspiciatis, facilis quibusdam maiores nulla minus ullam rem
 			praesentium voluptatibus laboriosam molestiae pariatur qua
@@ -78,11 +78,11 @@
 <Modal size="sm" title="Terms of Service" bind:open={clickOutsideModal} outsideclose>
 	<div class="mb-4 flex flex-col gap-2">
 		<h3 class="text-2xl font-bold text-gray-900">
-			<slot name="title">Lorem ipsum dolor sit amet consectetur adipisicin</slot>
+			<slot name="modal-title">Lorem ipsum dolor sit amet consectetur adipisicin</slot>
 		</h3>
 
 		<p>
-			<slot name="desc">
+			<slot name="modal-desc">
 				Lorem ipsum dolor sit amet consectetur adipisicing elit. In harum laboriosam laborum
 				dignissimos. Recusandae quis cum perspiciatis, facilis quibusdam maiores nulla minus ullam
 				rem praesentium voluptatibus laboriosam molestiae pariatur quaerat!

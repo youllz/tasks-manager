@@ -63,11 +63,17 @@
 			{:else}
 				{#each todo as items}
 					<TaskCards subtaskId={items.subtasks} taskId={items.id}>
-						{console.log(items)}
-						<span slot="title">
+						
+						<span slot="card-title">
 							{items.title}
 						</span>
-						<span slot="desc">
+						<span slot="card-desc">
+							{items.description}
+						</span>
+						<span slot="modal-title">
+							{items.title}
+						</span>
+						<span slot="modal-desc">
 							{items.description}
 						</span>
 					</TaskCards>
@@ -90,10 +96,16 @@
 			{:else}
 				{#each doing as items}
 					<TaskCards subtaskId={items.subtasks} taskId={items.id}>
-						<span slot="title">
+						<span slot="card-title">
 							{items.title}
 						</span>
-						<span slot="desc">
+						<span slot="card-desc">
+							{items.description}
+						</span>
+						<span slot="modal-title">
+							{items.title}
+						</span>
+						<span slot="modal-desc">
 							{items.description}
 						</span>
 					</TaskCards>
@@ -114,10 +126,16 @@
 			{:else}
 				{#each done as items}
 					<TaskCards subtaskId={items.subtasks} taskId={items.id}>
-						<span slot="title">
+						<span slot="card-title">
 							{items.title}
 						</span>
-						<span slot="desc">
+						<span slot="card-desc">
+							{items.description}
+						</span>
+						<span slot="modal-title">
+							{items.title}
+						</span>
+						<span slot="modal-desc">
 							{items.description}
 						</span>
 					</TaskCards>

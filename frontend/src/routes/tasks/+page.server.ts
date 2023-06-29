@@ -61,5 +61,8 @@ export const actions: Actions = {
 		}
 
 		
+	},
+	text: async () => {
+		console.log("test")
 	}
 };

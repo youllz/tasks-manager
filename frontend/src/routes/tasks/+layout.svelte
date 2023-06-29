@@ -21,7 +21,10 @@
 		Eye,
 		EyeOff,
 		Sun,
-		Moon
+		Moon,
+
+		Trash
+
 	} from 'lucide-svelte';
 	import '../../app.postcss';
 	import '../../app.css';
@@ -36,6 +39,7 @@
 	$: ({ recordData } = data);
 	let addTaskModal = false;
 	let boardModal = false;
+	let dropdownOpen = false;
 	let boardValue = '';
 	let id = 1;
 	let headerMenuPlacemant = 'bottom';
@@ -125,12 +129,12 @@
 		class="col-start-3 col-end-13 border-b-2 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5"
 	>
 		<div>
-			<span class="text-2xl">{$page.url.searchParams.get('name')}</span>
+			<span class="text-2xl">{$page.url.searchParams.get('name') || ''}</span>
 		</div>
 
 		<ul class="flex items-center gap-2">
 			<li>
-				<Button on:click={() => (addTaskModal = true)} class="gap-1 "
+				<Button disabled={$page.params.boardId? false : true} on:click={() => (addTaskModal = true)} class="gap-1 "
 					><Plus class="h-4 w-4" /> Add New Task</Button
 				>
 
@@ -185,16 +189,10 @@
 				</Modal>
 			</li>
 			<li>
-				<MenuButton class="dots-menu dark:text-white" vertical />
-				<Dropdown {headerMenuPlacemant} class="w-36">
-					<DropdownItem class=" flex items-center gap-1  hover:bg-gray-300">
-						<Settings class="h-4 w-4" /> Settings</DropdownItem
-					>
-					<DropdownItem class="  flex items-center gap-1 hover:bg-gray-300">
-						<LogOut class="h-4 w-4" /> Logout</DropdownItem
-					>
-					
-				</Dropdown>
+				<Button href="/tasks/{$page.params.boardId}/settings/board?name={$page.url.searchParams.get('name')}" color="alternative"><Settings class="h-4 w-4 mr-1"/>Settings</Button>
+			</li>
+			<li>
+				<form action=""><Button type="submit" color="alternative"><LogOut class="h-4 w-4 mr-1"/>Logout</Button></form>
 			</li>
 		</ul>
 	</header>
