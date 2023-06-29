@@ -31,24 +31,19 @@
 		setData();
 	}
 
-	
-	$: redirectMessage = $page.url.searchParams.get('message')
-	let toastMessage: string
+	$: redirectMessage = $page.url.searchParams.get('message');
+	let toastMessage: string;
 
-	$: if(redirectMessage) {
-		toastMessage= redirectMessage
+	$: if (redirectMessage) {
+		toastMessage = redirectMessage;
 	}
 
-	$: if(redirectMessage) {
-		toast.success(toastMessage)
+	$: if (redirectMessage) {
+		toast.success(toastMessage);
 	}
-	
-	
-	
-
 </script>
 
-<Toaster/>
+<Toaster />
 <div class="col-start-3 col-end-13 row-start-2 row-end-7 grid grid-cols-3 w-full">
 	<div class="p-5 overflow-scroll overflow-x-hidden">
 		<header class="flex items-center gap-1">
@@ -63,7 +58,6 @@
 			{:else}
 				{#each todo as items}
 					<TaskCards subtaskId={items.subtasks} taskId={items.id}>
-						
 						<span slot="card-title">
 							{items.title}
 						</span>

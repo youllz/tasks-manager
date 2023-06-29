@@ -9,40 +9,33 @@
 
 	export let data: PageData;
 
-	type Satus = "error" | "success" | undefined
+	type Satus = 'error' | 'success' | undefined;
 
-	let editForm: Satus 
+	let editForm: Satus;
 
 	$: ({ task, subtask } = data.editData);
 	let newSubTask = false;
 
-	let formSubmit:SubmitFunction  = () => {
-
-		return async ({result, update}) => {
-			console.log(result.type)
+	let formSubmit: SubmitFunction = () => {
+		return async ({ result, update }) => {
+			console.log(result.type);
 			switch (result.type) {
-				case "success":
-					toast.success("the task has been updated");
-					await update({reset: false})
+				case 'success':
+					toast.success('the task has been updated');
+					await update({ reset: false });
 					break;
-					case "failure":
-					toast.error("an error its produced the task has not been updated");
-						
+				case 'failure':
+					toast.error('an error its produced the task has not been updated');
+
 				default:
 					break;
 			}
-
-		}
-	}
-
-
-	
+		};
+	};
 </script>
 
 <Toaster />
 <div class="w-full flex flex-col items-center justify-center relative">
-
-
 	<Card class="min-w-[40vw]">
 		<form use:enhance={formSubmit} class="flex flex-col space-y-6" method="POST">
 			<div class="flex items-center justify-between mb-2">

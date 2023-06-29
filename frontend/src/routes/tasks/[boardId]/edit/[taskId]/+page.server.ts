@@ -84,7 +84,7 @@ export const actions: Actions = {
 				.update(params.taskId, { title: formData.title, description: formData.description });
 		} catch (err) {
 			console.log('Error', err);
-			return fail(413)
+			return fail(413);
 		}
 	}
 };

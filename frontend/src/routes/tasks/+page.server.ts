@@ -2,8 +2,7 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = (async () => {
-	return {
-	};
+	return {};
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -19,8 +18,10 @@ export const actions: Actions = {
 			throw error(err.status, err.message);
 		}
 
-		throw redirect(303, `/tasks/${boardData.id}?name=${data.name}&message=the board ${data.name} has been created with succsess`);
-
+		throw redirect(
+			303,
+			`/tasks/${boardData.id}?name=${data.name}&message=the board ${data.name} has been created with succsess`
+		);
 	},
 
 	createTask: async ({ request, locals }) => {
@@ -43,7 +44,6 @@ export const actions: Actions = {
 				description: data.description,
 				status: data.status,
 				boards: data.boardId
-
 			});
 
 			for (let i = 0; i < subTasks.length; i++) {
@@ -57,12 +57,10 @@ export const actions: Actions = {
 				.update(taskRecord.id, { subtasks: subTasksId.map((item) => item.id) });
 		} catch (err: any) {
 			console.log('Error', err);
-			return fail(413)
+			return fail(413);
 		}
-
-		
 	},
 	text: async () => {
-		console.log("test")
+		console.log('test');
 	}
 };

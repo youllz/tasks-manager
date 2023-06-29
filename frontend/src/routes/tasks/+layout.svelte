@@ -22,9 +22,7 @@
 		EyeOff,
 		Sun,
 		Moon,
-
 		Trash
-
 	} from 'lucide-svelte';
 	import '../../app.postcss';
 	import '../../app.css';
@@ -46,7 +44,7 @@
 	let sidebar = true;
 	let allSubtasks: string[];
 	let record: Record[] = [];
-	let headerTitle: string = ''
+	let headerTitle: string = '';
 	let numberOfSubtask = [
 		{
 			id: id++
@@ -97,31 +95,29 @@
 		}, 500);
 	}
 
-	const formSubmit:SubmitFunction = () => {
-
-
-		return async ({result, update}) => {
+	const formSubmit: SubmitFunction = () => {
+		return async ({ result, update }) => {
 			switch (result.type) {
-				case "success":
-					toast.success('the task was successfully created')
-					await update({reset: true})
+				case 'success':
+					toast.success('the task was successfully created');
+					await update({ reset: true });
 					break;
-					case "failure" :
-						toast.error('error the task was not created')
-						await update({reset: false})
+				case 'failure':
+					toast.error('error the task was not created');
+					await update({ reset: false });
 				default:
 					break;
 			}
-		}
-	}
+		};
+	};
 
-	function getHeaderTitle(e:MouseEvent) {
-		const el = e.target as HTMLAnchorElement
-		headerTitle = el.innerText
+	function getHeaderTitle(e: MouseEvent) {
+		const el = e.target as HTMLAnchorElement;
+		headerTitle = el.innerText;
 	}
 </script>
 
-<Toaster/>
+<Toaster />
 <main class="grid grid-cols-12 grid-rows-6 h-screen w-screen bg-[#f4ecf1] relative">
 	<!-- HEADER -->
 	<header
@@ -134,8 +130,10 @@
 
 		<ul class="flex items-center gap-2">
 			<li>
-				<Button disabled={$page.params.boardId? false : true} on:click={() => (addTaskModal = true)} class="gap-1 "
-					><Plus class="h-4 w-4" /> Add New Task</Button
+				<Button
+					disabled={$page.params.boardId ? false : true}
+					on:click={() => (addTaskModal = true)}
+					class="gap-1 "><Plus class="h-4 w-4" /> Add New Task</Button
 				>
 
 				<Modal bind:open={addTaskModal} size="xs" autoclose={false} outsideclose class="w-full">
@@ -189,10 +187,17 @@
 				</Modal>
 			</li>
 			<li>
-				<Button href="/tasks/{$page.params.boardId}/settings/board?name={$page.url.searchParams.get('name')}" color="alternative"><Settings class="h-4 w-4 mr-1"/>Settings</Button>
+				<Button
+					href="/tasks/{$page.params.boardId}/settings/board?name={$page.url.searchParams.get(
+						'name'
+					)}"
+					color="alternative"><Settings class="h-4 w-4 mr-1" />Settings</Button
+				>
 			</li>
 			<li>
-				<form action=""><Button type="submit" color="alternative"><LogOut class="h-4 w-4 mr-1"/>Logout</Button></form>
+				<form action="">
+					<Button type="submit" color="alternative"><LogOut class="h-4 w-4 mr-1" />Logout</Button>
+				</form>
 			</li>
 		</ul>
 	</header>
@@ -209,11 +214,10 @@
 				<strong class="text-lg font-bold"> LOGO </strong>
 			</div>
 			<div class="text-center">
-				<small> ALL BOARD ({record.length })</small>
+				<small> ALL BOARD ({record.length})</small>
 			</div>
-			<nav class="mt-2 h-[400px] overflow-y-scroll" >
+			<nav class="mt-2 h-[400px] overflow-y-scroll">
 				<ul class="flex flex-col gap-1">
-				
 					{#each record as item, idx}
 						<li>
 							<Button
@@ -226,44 +230,43 @@
 								{item.name}
 							</Button>
 						</li>
-						{/each}
-					</ul>
-				</nav>
+					{/each}
+				</ul>
+			</nav>
 
-				<Button
-					type="button"
-					on:click={() => {
-						boardModal = true;
-					}}
-					class="w-full mt-4"
-					outline
+			<Button
+				type="button"
+				on:click={() => {
+					boardModal = true;
+				}}
+				class="w-full mt-4"
+				outline
+			>
+				<Plus class="h-4 w-4 mr-1" /> Add New Board
+			</Button>
+
+			<Modal bind:open={boardModal} size="xs" autoclose={false} outsideclose class="w-full">
+				<form
+					use:enhance
+					class="flex flex-col space-y-6"
+					action="/tasks?/createBoard"
+					method="POST"
 				>
-					<Plus class="h-4 w-4 mr-1" /> Add New Board
-				</Button>
+					<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create New Board</h3>
+					<Label class="space-y-2">
+						<span>Title</span>
+						<Input
+							type="text"
+							name="name"
+							placeholder="e.g Marketing Plan"
+							bind:value={boardValue}
+							required
+						/>
+					</Label>
 
-				<Modal bind:open={boardModal} size="xs" autoclose={false} outsideclose class="w-full">
-					<form
-						use:enhance
-						class="flex flex-col space-y-6"
-						action="/tasks?/createBoard"
-						method="POST"
-					>
-						<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create New Board</h3>
-						<Label class="space-y-2">
-							<span>Title</span>
-							<Input
-								type="text"
-								name="name"
-								placeholder="e.g Marketing Plan"
-								bind:value={boardValue}
-								required
-							/>
-						</Label>
-					
-						<Button type="submit" class="w-full1">Create</Button>
-					
-					</form>
-				</Modal>
+					<Button type="submit" class="w-full1">Create</Button>
+				</form>
+			</Modal>
 			<div class="w-full mx-1 flex items-center justify-center absolute bottom-4">
 				<DarkMode class="text-md  ">
 					<svelte:fragment slot="lightIcon">
@@ -287,7 +290,6 @@
 		class:h-sidebar={!sidebar}
 		class="col-start-3 col-end-13 row-start-2 row-end-7 overflow-x-hidden relative"
 	>
-		
 		<slot />
 	</section>
 
@@ -299,7 +301,6 @@
 			id="sidebar"
 			class="rounded-full absolute right-2 bottom-2"
 		>
-			
 			{#if sidebar}
 				<EyeOff class="h-4 w-4" />
 			{:else}
