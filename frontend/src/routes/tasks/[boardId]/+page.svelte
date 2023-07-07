@@ -3,10 +3,14 @@
 	import { page } from '$app/stores';
 	import type { Record } from 'pocketbase';
 	import toast, { Toaster } from 'svelte-french-toast';
+	import {currentBoard} from '$lib/store.js'
 	export let data;
-	// $: console.log(data);
+	$: console.log(data.recordData);
 
 	$: ({ allTasks } = data);
+	$: ({recordData} = data)
+
+	$currentBoard = data.recordData?.find((item) => item.id === $page.params.boardId)
 
 	// let pageTasks = allTasks.filter((item:any) => item.boards === $page.params.task)
 	// console.log(pageTasks)
@@ -57,7 +61,7 @@
 				</div>
 			{:else}
 				{#each todo as items}
-					<TaskCards subtaskId={items.subtasks} taskId={items.id}>
+					<TaskCards  subtaskId={items.subtasks} taskId={items.id}>
 						<span slot="card-title">
 							{items.title}
 						</span>

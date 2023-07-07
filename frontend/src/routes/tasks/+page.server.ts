@@ -20,7 +20,7 @@ export const actions: Actions = {
 
 		throw redirect(
 			303,
-			`/tasks/${boardData.id}?name=${data.name}&message=the board ${data.name} has been created with succsess`
+			`/tasks/${boardData.id}?boardName=${data.name}&message=the board ${data.name} has been created with succsess`
 		);
 	},
 

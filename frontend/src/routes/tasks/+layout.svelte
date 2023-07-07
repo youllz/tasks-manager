@@ -125,7 +125,7 @@
 		class="col-start-3 col-end-13 border-b-2 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5"
 	>
 		<div>
-			<span class="text-2xl">{$page.url.searchParams.get('name') || ''}</span>
+			<span class="text-2xl">{$page.url.searchParams.get('boardName') || ' '}</span>
 		</div>
 
 		<ul class="flex items-center gap-2">
@@ -188,8 +188,8 @@
 			</li>
 			<li>
 				<Button
-					href="/tasks/{$page.params.boardId}/settings/board?name={$page.url.searchParams.get(
-						'name'
+					href="/tasks/{$page.params.boardId}/settings/board?boardName={$page.url.searchParams.get(
+						'boardName'
 					)}"
 					color="alternative"><Settings class="h-4 w-4 mr-1" />Settings</Button
 				>
@@ -222,7 +222,7 @@
 						<li>
 							<Button
 								on:click={getHeaderTitle}
-								href="/tasks/{item.id}?name={item.name}"
+								href="/tasks/{item.id}?boardName={item.name}"
 								color={$page.params.boardId === item.id ? 'purple' : 'alternative'}
 								class="w-full gap-1 justify-start"
 							>

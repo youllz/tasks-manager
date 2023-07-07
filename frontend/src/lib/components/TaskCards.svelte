@@ -16,10 +16,12 @@
 	import { enhance } from '$app/forms';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import {currentBoard} from '$lib/store.js'
 	let clickOutsideModal = false;
 
 	export let subtaskId: string[] = [];
 	export let taskId: string;
+	
 
 	let selectValue = 'todo';
 
@@ -37,6 +39,12 @@
 			name: 'done'
 		}
 	];
+	
+
+	let boardName = ''
+	if($currentBoard) {
+		boardName = $currentBoard.name
+	}
 
 	// console.log(subtaskId)
 
@@ -117,7 +125,7 @@
 			>
 			<Button
 				type="button"
-				href="/tasks/{$page.params.boardId}/edit/{taskId}"
+				href="/tasks/{$page.params.boardId}/edit/{taskId}?boardName={boardName}"
 				color="alternative"
 				class="w-full"
 			>

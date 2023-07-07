@@ -28,7 +28,7 @@
 	<header
 		class="   col-start-3 col-end-13 border-b-2 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5"
 	>
-		<Button href="/tasks/{$page.params.boardId}?name={$page.url.searchParams.get('name')}" outline>
+		<Button href="/tasks/{$page.params.boardId}?boardName={$page.url.searchParams.get('boardName')}" outline>
 			<MoveLeft class="w-4 h-4" />
 		</Button>
 

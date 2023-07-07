@@ -32,6 +32,12 @@
 			}
 		};
 	};
+
+	$: currentBoardName = $page.url.searchParams.get('boardName')
+	let boardName:string = ''
+	$:if(currentBoardName) {
+		boardName = currentBoardName
+	}
 </script>
 
 <Toaster />
@@ -40,7 +46,7 @@
 		<form use:enhance={formSubmit} class="flex flex-col space-y-6" method="POST">
 			<div class="flex items-center justify-between mb-2">
 				<a
-					href="/tasks/{$page.params.boardId}"
+					href="/tasks/{$page.params.boardId}?boardName={boardName}"
 					class="text-xl font-medium text-gray-900 dark:text-white"><MoveLeft /></a
 				>
 				<h1 class="font-bold">Edit Task</h1>
