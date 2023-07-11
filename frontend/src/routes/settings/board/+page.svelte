@@ -6,14 +6,17 @@
 	import toast, { Toaster } from 'svelte-french-toast';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
+	import { Edit, Trash } from 'lucide-svelte';
 
 	export let data: PageData;
 
 	let popupModal = false;
 	$: editBtnLoading = false;
-	$: deleteBtnLoadding = false;
+	$: deleteBtnLoading = false;
 
 	$: ({ boardName } = data);
+
+	
 
 	const editForm: SubmitFunction = () => {
 		editBtnLoading = true;
@@ -34,19 +37,22 @@
 	};
 
 	const deletForm: SubmitFunction = () => {
-		deleteBtnLoadding = true;
+		deleteBtnLoading = true;
 
 		return async ({ result }) => {
 			switch (result.type) {
-				case 'redirect':
-					await goto('/tasks?message=the sheet has been deleted successfully', {
+				case 'success':
+					toast.success('the sheet has been deleted successfully');
+					await goto('/tasks', {
 						replaceState: true
 					});
 
-					deleteBtnLoadding = false;
+					deleteBtnLoading = false;
+					popupModal = false
 					break;
-				case 'failure':
-					toast.error('an error its produced the task has not been deleted');
+					case 'failure':
+						toast.error('an error its produced the task has not been deleted');
+						popupModal = false
 
 					break;
 			}
@@ -56,28 +62,31 @@
 
 <Toaster />
 <div class="flex max-w-[30rem] w-[500px] flex-col space-y-6">
+	<h3 class="text-xl font-medium text-gray-900 dark:text-white mb-4">Board Settings</h3>
+	{#each boardName as items}
+		
 	<form use:enhance={editForm} class="space-y-6" method="POST">
-		<h3 class="text-xl font-medium text-gray-900 dark:text-white mb-4">Board Settings</h3>
-		<Label class="space-y-2">
-			<span>Title</span>
-			<Input
-				type="text"
-				name="boardName"
-				placeholder="e.g Marketing plan"
-				value={boardName}
-				autocomplete="off"
-				required
-			/>
-			<input type="hidden" name="boardId" value={$page.params.boardId} />
-		</Label>
-
-		<div class="flex flex-col gap-1">
-			<Button formaction="?/rename" disabled={editBtnLoading} outline type="submit" class="w-full"
-				>Rename the board</Button
-			>
-			<Button on:click={() => (popupModal = true)} type="button" color="red" class="w-full"
-				>Delete the board</Button
-			>
+		<div class="flex gap-2 items-center">
+			<Label class="space-y-2">
+				<!-- <span>name</span> -->
+				<Input
+					type="text"
+					name="boardName"
+					placeholder="e.g Marketing plan"
+					value={items.name}
+					autocomplete="off"
+					required
+				/>
+				<input type="hidden" name="boardId" value={items.id} />
+			</Label>
+			<div class="flex items-center gap-1">
+				<Button formaction="?/rename" disabled={editBtnLoading} outline type="submit" class="w-full"
+					><Edit class="h-4 w-4"/></Button
+				>
+				<Button on:click={() => (popupModal = true)} type="button" color="red" class="w-full"
+					><Trash class="h-4 w-4"/></Button
+				>
+			</div>
 		</div>
 	</form>
 	<Modal bind:open={popupModal} size="xs" autoclose={false}>
@@ -100,7 +109,7 @@
 				Are you sure you want to delete this board
 			</h3>
 			<form use:enhance={deletForm} action="?/delete" method="POST">
-				<input type="hidden" name="boardId" value={$page.params.boardId} />
+				<input type="hidden" name="boardId" value={items.id} />
 				<Button type="submit" color="red" class="mr-2">Yes, I'm sure</Button>
 				<Button on:click={() => (popupModal = false)} type="button" color="alternative"
 					>No, cancel</Button
@@ -108,4 +117,5 @@
 			</form>
 		</div>
 	</Modal>
+	{/each}
 </div>

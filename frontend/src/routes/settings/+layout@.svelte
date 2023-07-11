@@ -4,19 +4,19 @@
 	import { Button, DarkMode } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 
-	export let data: LayoutData;
+	// export let data: LayoutData;
 
 	const urlPath = [
 		{
-			url: `/tasks/${$page.params.boardId}/settings/board`,
+			url: `/settings/board`,
 			name: 'board'
 		},
 		{
-			url: `/tasks/${$page.params.boardId}/settings/email`,
+			url: `/settings/email`,
 			name: 'email'
 		},
 		{
-			url: `/tasks/${$page.params.boardId}/settings/password`,
+			url: `/settings/password`,
 			name: 'password'
 		}
 	];
@@ -28,7 +28,7 @@
 	<header
 		class="   col-start-3 col-end-13 border-b-2 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5"
 	>
-		<Button href="/tasks/{$page.params.boardId}?boardName={$page.url.searchParams.get('boardName')}" outline>
+		<Button href="/tasks" outline>
 			<MoveLeft class="w-4 h-4" />
 		</Button>
 

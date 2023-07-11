@@ -188,14 +188,13 @@
 			</li>
 			<li>
 				<Button
-					href="/tasks/{$page.params.boardId}/settings/board?boardName={$page.url.searchParams.get(
-						'boardName'
-					)}"
+					disabled
+					href="/settings/board"
 					color="alternative"><Settings class="h-4 w-4 mr-1" />Settings</Button
 				>
 			</li>
 			<li>
-				<form action="">
+				<form action="/logout" >
 					<Button type="submit" color="alternative"><LogOut class="h-4 w-4 mr-1" />Logout</Button>
 				</form>
 			</li>

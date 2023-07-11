@@ -1,7 +1,10 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types.js';
 
-export const load: PageServerLoad = (async () => {
+export const load: PageServerLoad = (async ({locals}) => {
+	if(!locals.pb.authStore.isValid) {
+		throw redirect(303, '/login')
+	}
 	return {};
 }) satisfies PageServerLoad;
 
@@ -12,7 +15,7 @@ export const actions: Actions = {
 		let boardData;
 
 		try {
-			boardData = await locals.pb.collection('boards').create(data);
+			boardData = await locals.pb.collection('boards').create({name:data.name, user: locals.user?.id});
 		} catch (err: any) {
 			console.log('Error', err);
 			throw error(err.status, err.message);
@@ -43,13 +46,14 @@ export const actions: Actions = {
 				title: data.title,
 				description: data.description,
 				status: data.status,
-				boards: data.boardId
+				boards: data.boardId,
+				user: locals.user?.id
 			});
 
 			for (let i = 0; i < subTasks.length; i++) {
 				subTasksId[i] = await locals.pb
 					.collection('subtasks')
-					.create({ title: subTasks[i], done: 'off', tasks: taskRecord.id });
+					.create({ title: subTasks[i], done: 'off', tasks: taskRecord.id, user: locals.user?.id });
 			}
 
 			locals.pb

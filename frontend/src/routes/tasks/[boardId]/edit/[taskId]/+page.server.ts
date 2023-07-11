@@ -51,18 +51,17 @@ export const actions: Actions = {
 			}
 		}
 	},
-	createSubtask: async ({ request, locals }) => {
+	createSubtask: async ({ request, locals, params }) => {
 		const formData = Object.fromEntries(await request.formData()) as {
 			subtask: string;
 			taskId: string;
 		};
-		console.log(formData);
 		const { subtask, taskId } = formData;
 
 		try {
 			const subtaskRecord = await locals.pb
 				.collection('subtasks')
-				.create({ title: subtask, done: 'off' });
+				.create({ title: subtask, done: 'off', user: locals.user!.id, tasks: params.taskId });
 			const taskRecord = await locals.pb.collection('tasks').getOne(taskId);
 			let subtasksId = taskRecord.subtasks as string[];
 			subtasksId.push(subtaskRecord.id);

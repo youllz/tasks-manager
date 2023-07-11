@@ -1,11 +1,11 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from '../$types.js';
 
-export const load = (async ({ locals, params }) => {
+export const load = (async ({ locals }) => {
 	const getBoard = async () => {
 		try {
-			const boardName = await locals.pb.collection('boards').getOne(params.boardId);
-			return boardName.name;
+			const boardName = await locals.pb.collection('boards').getFullList();
+			return boardName;
 		} catch (err: any) {
 			console.log('Error: ', err);
 			throw error(err.status, err.message);
@@ -13,7 +13,7 @@ export const load = (async ({ locals, params }) => {
 	};
 
 	return {
-		boardName: structuredClone(await getBoard()) as { name: string }
+		boardName: structuredClone(await getBoard())
 	};
 }) satisfies PageServerLoad;
 
@@ -28,7 +28,6 @@ export const actions: Actions = {
 			console.log('Error: ', err);
 			fail(4133);
 		}
-		throw redirect(303, `/tasks?message=the sheet has been deleted successfully`);
 	},
 
 	rename: async ({ request, locals }) => {

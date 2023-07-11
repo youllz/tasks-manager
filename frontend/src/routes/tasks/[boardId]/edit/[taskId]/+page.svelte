@@ -9,16 +9,12 @@
 
 	export let data: PageData;
 
-	type Satus = 'error' | 'success' | undefined;
-
-	let editForm: Satus;
-
+	
 	$: ({ task, subtask } = data.editData);
 	let newSubTask = false;
 
 	let formSubmit: SubmitFunction = () => {
 		return async ({ result, update }) => {
-			console.log(result.type);
 			switch (result.type) {
 				case 'success':
 					toast.success('the task has been updated');
