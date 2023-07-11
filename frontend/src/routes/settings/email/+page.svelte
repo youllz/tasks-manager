@@ -12,6 +12,7 @@
 		<Label class="space-y-2">
 			<span>change email</span>
 			<Input
+			disabled
 				type="text"
 				name="boardName"
 				placeholder="example@.com"
@@ -20,7 +21,7 @@
 			/>
 			<input type="hidden" name="boardId"  />
 		</Label>
-		<Button type="submit">
+		<Button disabled type="submit">
 			update
 		</Button>
 	</form>

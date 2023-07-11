@@ -9,36 +9,39 @@
 	const urlPath = [
 		{
 			url: `/settings/board`,
-			name: 'board'
+			name: 'board',
+			disabled: false
 		},
 		{
 			url: `/settings/email`,
-			name: 'email'
+			name: 'email',
+			disabled: true
 		},
 		{
 			url: `/settings/password`,
-			name: 'password'
+			name: 'password',
+			disabled: true
 		}
 	];
 
 	// $: console.log($page)
 </script>
 
-<section class="w-[100dvw] h-[100dvh] grid grid-cols-12 grid-rows-6 gap-1 bg-[#f4ecf1] relative">
+<section class="w-[100dvw] h-[100dvh] grid grid-cols-12 grid-rows-6  bg-[#f4ecf1] relative dark:bg-gray-950">
 	<header
-		class="   col-start-3 col-end-13 border-b-2 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5"
+		class="   col-start-3 col-end-13 border-b-2 dark:border-slate-600 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5 dark:bg-gray-800"
 	>
 		<Button href="/tasks" outline>
 			<MoveLeft class="w-4 h-4" />
 		</Button>
 
-		<h2 class="text-2xl font-bold">Settings</h2>
+		<h2 class="text-2xl dark:text-gray-200 font-bold">Settings</h2>
 	</header>
 	<aside
-		class="col-start-1 col-end-3 row-start-1 row-end-7 border-r-2 border-slate-100 bg-[#FFFFFF] pl-1 pr-4 relative"
+		class="col-start-1 col-end-3 row-start-1 row-end-7 border-r-2 dark:border-slate-600 border-slate-100 bg-[#FFFFFF] pl-1 pr-4 relative dark:bg-gray-800"
 	>
-		<div class="w-full h-[132.50px] flex items-center justify-center border-b-2 border-slate-100">
-			<strong class="text-lg font-bold"> LOGO </strong>
+		<div class="w-full h-[132.50px] flex items-center justify-center border-b-2 dark:border-slate-600 border-slate-100">
+			<strong class="text-lg dark:text-gray-200 font-bold"> LOGO </strong>
 		</div>
 		<div>
 			<nav>
@@ -46,6 +49,7 @@
 					{#each urlPath as item}
 						<li>
 							<Button
+								disabled={item.disabled}
 								href={item.url}
 								color={item.url === $page.url.pathname ? 'purple' : 'alternative'}
 								class="w-full gap-1 justify-start"
@@ -73,7 +77,7 @@
 		</div>
 	</aside>
 	<section
-		class="col-start-3 col-end-13 row-start-2 row-end-7 flex items-start pl-4 justify-start overflow-x-hidden relative"
+		class="col-start-3 col-end-13 row-start-2 row-end-7 flex items-start p-6 justify-start overflow-x-hidden relative"
 	>
 		<slot />
 	</section>

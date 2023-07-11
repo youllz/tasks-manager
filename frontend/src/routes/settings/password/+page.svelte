@@ -13,6 +13,7 @@
 		<Label class="space-y-2">
 			<span> password</span>
 			<Input
+			disabled
 				type="password"
 				name="oldPassword"
 				autocomplete="off"
@@ -22,6 +23,7 @@
 		<Label class="space-y-2">
 			<span> new password</span>
 			<Input
+			disabled
 				type="password"
 				name="password"
 				autocomplete="off"
@@ -31,13 +33,14 @@
 		<Label class="space-y-2">
 			<span> confirm new password</span>
 			<Input
+			disabled
 				type="password"
 				name="passwordConfirm"
 				autocomplete="off"
 				required
 			/>
 		</Label>
-		<Button type="submit">
+		<Button disabled type="submit">
 			update
 		</Button>
 	</form>

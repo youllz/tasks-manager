@@ -84,7 +84,7 @@
 
 <Modal size="sm" title="Terms of Service" bind:open={clickOutsideModal} outsideclose>
 	<div class="mb-4 flex flex-col gap-2">
-		<h3 class="text-2xl font-bold text-gray-900">
+		<h3 class="text-2xl font-bold text-gray-900  dark:text-gray-300">
 			<slot name="modal-title">Lorem ipsum dolor sit amet consectetur adipisicin</slot>
 		</h3>
 
@@ -99,10 +99,10 @@
 
 	<form use:enhance method="POST">
 		<div class="flex flex-col gap-3">
-			<small class="text-gray-900"> Subtasks (1 of 3) </small>
+			<small class="text-gray-900  dark:text-gray-400"> Subtasks (1 of 3) </small>
 			<div class="flex flex-col gap-1">
 				{#each subTaskData as data}
-					<div class="bg-[#f4ecf1] p-2">
+					<div class="bg-[#f4ecf1] p-2 dark:bg-gray-900">
 						<Checkbox name={data.id} checked={data.done === 'on'}>{data.title}</Checkbox>
 					</div>
 				{/each}

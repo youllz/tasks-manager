@@ -118,14 +118,14 @@
 </script>
 
 <Toaster />
-<main class="grid grid-cols-12 grid-rows-6 h-screen w-screen bg-[#f4ecf1] relative">
+<main class="grid grid-cols-12 grid-rows-6 h-screen w-screen bg-[#f4ecf1] relative dark:bg-gray-950">
 	<!-- HEADER -->
 	<header
 		class:h-sidebar={!sidebar}
-		class="col-start-3 col-end-13 border-b-2 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5"
+		class="col-start-3 col-end-13 border-b-2 dark:border-slate-600  bg-[#FFFFFF] flex items-center font-bold justify-between px-5 dark:bg-gray-800"
 	>
 		<div>
-			<span class="text-2xl">{$page.url.searchParams.get('boardName') || ' '}</span>
+			<span  class="text-2xl dark:text-gray-200">{$page.url.searchParams.get('boardName') || ' '}</span>
 		</div>
 
 		<ul class="flex items-center gap-2">
@@ -188,7 +188,7 @@
 			</li>
 			<li>
 				<Button
-					disabled
+					
 					href="/settings/board"
 					color="alternative"><Settings class="h-4 w-4 mr-1" />Settings</Button
 				>
@@ -207,15 +207,15 @@
 
 	{#if sidebar}
 		<aside
-			class="col-start-1 col-end-3 row-start-1 row-end-7 border-r-2 border-slate-100 bg-[#FFFFFF] pl-1 pr-4 relative"
+			class="col-start-1 col-end-3 row-start-1 row-end-7 border-r-2 dark:border-slate-600  bg-[#FFFFFF] pl-1 pr-4 relative dark:bg-gray-800"
 		>
-			<div class="w-full h-[132.50px] flex items-center justify-center border-b-2 border-slate-100">
-				<strong class="text-lg font-bold"> LOGO </strong>
+			<div class="w-full h-[132.50px] flex items-center justify-center ">
+				<strong class="text-lg font-bold dark:text-gray-200"> LOGO </strong>
 			</div>
 			<div class="text-center">
-				<small> ALL BOARD ({record.length})</small>
+				<small class="dark:text-gray-400"> ALL BOARD ({record.length})</small>
 			</div>
-			<nav class="mt-2 h-[400px] overflow-y-scroll">
+			<nav class="mt-2 h-[400px] overflow-y-auto">
 				<ul class="flex flex-col gap-1">
 					{#each record as item, idx}
 						<li>

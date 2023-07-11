@@ -40,7 +40,7 @@
 
 <Toaster />
 <section
-	class="w-screen h-screen grid grid-cols-2 gap-4 px-[5vw] pt-[5vw] items-center justify-center auto-rows-min"
+	class="w-screen h-screen grid grid-cols-2 gap-4 px-[5vw] pt-[5vw] items-center justify-center auto-rows-min dark:bg-gray-950"
 >
 	<div>
 		<figure class="w-full h-[600px]">
@@ -49,10 +49,10 @@
 	</div>
 	<div class="min-w-[500px] flex flex-col gap-4">
 		<div>
-			<h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-base-content">
+			<h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-base-content dark:text-gray-200">
 				Login to your account
 			</h2>
-			<p class="text-center mt-1">
+			<p class="text-center mt-1 dark:text-gray-200">
 				Or <a
 					href="/register"
 					class="text-purple-700 font-medium hover:cursor-pointer hover:underline">register</a
@@ -81,7 +81,7 @@
 					{/if}
 					Login
 				</Button>
-				<p class="text-center">OR CONTINUE WITH</p>
+				<p class="text-center dark:text-gray-200">OR CONTINUE WITH</p>
 
 				<Button disabled outline class="w-full    ">
 					<svg
