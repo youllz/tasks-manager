@@ -57,7 +57,7 @@
 
 	// getData()
 
-	let subTaskData = new Array(subtaskId.length);
+	$: subTaskData = new Array(subtaskId.length);
 	onMount(async () => {
 		for (let i = 0; i < subTaskData.length; i++) {
 			subTaskData[i] = await pb.collection('subtasks').getFirstListItem(`id="${subtaskId[i]}"`);
@@ -84,7 +84,7 @@
 	</small>
 </Card>
 
-<Modal size="sm" title="Terms of Service" bind:open={clickOutsideModal} outsideclose>
+<Modal size="sm" title="Tasks detail" bind:open={clickOutsideModal} outsideclose>
 	<div class="mb-4 flex flex-col gap-2">
 		<h3 class="text-2xl font-bold text-gray-900 dark:text-gray-300">
 			<slot name="modal-title">Lorem ipsum dolor sit amet consectetur adipisicin</slot>
@@ -105,7 +105,7 @@
 			<div class="flex flex-col gap-1">
 				{#each subTaskData as data}
 					<div class="bg-[#f4ecf1] p-2 dark:bg-gray-900">
-						<Checkbox name={data.id} checked={data.done === 'on'} value={data.done}
+						<Checkbox name={data.id} checked={data.done === 'on'} 
 							>{data.title}</Checkbox
 						>
 					</div>
