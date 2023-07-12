@@ -27,7 +27,9 @@
 	// $: console.log($page)
 </script>
 
-<section class="w-[100dvw] h-[100dvh] grid grid-cols-12 grid-rows-6  bg-[#f4ecf1] relative dark:bg-gray-950">
+<section
+	class="w-[100dvw] h-[100dvh] grid grid-cols-12 grid-rows-6 bg-[#f4ecf1] relative dark:bg-gray-950"
+>
 	<header
 		class="   col-start-3 col-end-13 border-b-2 dark:border-slate-600 border-slate-100 bg-[#FFFFFF] flex items-center font-bold justify-between px-5 dark:bg-gray-800"
 	>
@@ -40,7 +42,9 @@
 	<aside
 		class="col-start-1 col-end-3 row-start-1 row-end-7 border-r-2 dark:border-slate-600 border-slate-100 bg-[#FFFFFF] pl-1 pr-4 relative dark:bg-gray-800"
 	>
-		<div class="w-full h-[132.50px] flex items-center justify-center border-b-2 dark:border-slate-600 border-slate-100">
+		<div
+			class="w-full h-[132.50px] flex items-center justify-center border-b-2 dark:border-slate-600 border-slate-100"
+		>
 			<strong class="text-lg dark:text-gray-200 font-bold"> LOGO </strong>
 		</div>
 		<div>

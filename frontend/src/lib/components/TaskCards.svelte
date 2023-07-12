@@ -16,12 +16,11 @@
 	import { enhance } from '$app/forms';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import {currentBoard} from '$lib/store.js'
+	import { currentBoard } from '$lib/store.js';
 	let clickOutsideModal = false;
 
 	export let subtaskId: string[] = [];
 	export let taskId: string;
-	
 
 	let selectValue = 'todo';
 
@@ -39,11 +38,10 @@
 			name: 'done'
 		}
 	];
-	
 
-	let boardName = ''
-	if($currentBoard) {
-		boardName = $currentBoard.name
+	let boardName = '';
+	if ($currentBoard) {
+		boardName = $currentBoard.name;
 	}
 
 	// console.log(subtaskId)
@@ -80,11 +78,15 @@
 			praesentium voluptatibus laboriosam molestiae pariatur qua
 		</slot>
 	</p>
+
+	<small class="mt-3">
+		subtasks ({subTaskData.filter((item) => item.done === 'on').length} of {subTaskData.length})
+	</small>
 </Card>
 
 <Modal size="sm" title="Terms of Service" bind:open={clickOutsideModal} outsideclose>
 	<div class="mb-4 flex flex-col gap-2">
-		<h3 class="text-2xl font-bold text-gray-900  dark:text-gray-300">
+		<h3 class="text-2xl font-bold text-gray-900 dark:text-gray-300">
 			<slot name="modal-title">Lorem ipsum dolor sit amet consectetur adipisicin</slot>
 		</h3>
 
@@ -99,11 +101,13 @@
 
 	<form use:enhance method="POST">
 		<div class="flex flex-col gap-3">
-			<small class="text-gray-900  dark:text-gray-400"> Subtasks (1 of 3) </small>
+			<small class="text-gray-900 dark:text-gray-400"> Subtasks (1 of 3) </small>
 			<div class="flex flex-col gap-1">
 				{#each subTaskData as data}
 					<div class="bg-[#f4ecf1] p-2 dark:bg-gray-900">
-						<Checkbox name={data.id} checked={data.done === 'on'}>{data.title}</Checkbox>
+						<Checkbox name={data.id} checked={data.done === 'on'} value={data.done}
+							>{data.title}</Checkbox
+						>
 					</div>
 				{/each}
 			</div>

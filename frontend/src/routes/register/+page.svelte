@@ -6,25 +6,16 @@
 	import { Mail, KeyRound, User } from 'lucide-svelte';
 	import toast, { Toaster } from 'svelte-french-toast';
 
-
-
-
-	const registerForm:SubmitFunction = () => {
-
-
-		return async({result,update}) => {
+	const registerForm: SubmitFunction = () => {
+		return async ({ result, update }) => {
 			switch (result.type) {
-				case "redirect":
-					goto('/login',{replaceState: true})
-				case "failure": 
-					toast.error("we encountered a problem when recording")
-
+				case 'redirect':
+					goto('/login', { replaceState: true });
+				case 'failure':
+					toast.error('we encountered a problem when recording');
 			}
-		}
-	}
-	
-	
-	
+		};
+	};
 </script>
 
 <Toaster />
@@ -39,7 +30,9 @@
 	</div>
 	<div class="min-w-[500px] flex flex-col gap-4">
 		<div class="">
-			<h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-base-content dark:text-gray-200">
+			<h2
+				class="mt-2 text-center text-3xl font-bold tracking-tight text-base-content dark:text-gray-200"
+			>
 				Register for an account
 			</h2>
 			<p class="text-center mt-1 dark:text-gray-200">
@@ -53,14 +46,28 @@
 
 		<form use:enhance={registerForm} action="?/register" method="POST" class="flex flex-col gap-2">
 			<div>
-				<Label for="name" class="mb-2"> Name</Label>
-				<Input type="text" name="name" id="first_name" placeholder="John" required autocomplete="off">
+				<Label for="name" class="mb-2">Name</Label>
+				<Input
+					type="text"
+					name="name"
+					id="first_name"
+					placeholder="John"
+					required
+					autocomplete="off"
+				>
 					<User slot="left" class="h-4 w-4" />
 				</Input>
 			</div>
 			<div>
 				<Label for="mail" class="mb-2">Mail</Label>
-				<Input type="email" id="mail" name="email" placeholder="example@.com" required autocomplete="off">
+				<Input
+					type="email"
+					id="mail"
+					name="email"
+					placeholder="example@.com"
+					required
+					autocomplete="off"
+				>
 					<Mail slot="left" class="h-4 w-4" />
 				</Input>
 			</div>
@@ -72,7 +79,13 @@
 			</div>
 			<div>
 				<Label for="confirmPassword" class="mb-2">Confirm Password</Label>
-				<Input type="password" name="passwordConfirm" id="confirmPassword" required autocomplete="off">
+				<Input
+					type="password"
+					name="passwordConfirm"
+					id="confirmPassword"
+					required
+					autocomplete="off"
+				>
 					<KeyRound slot="left" class="h-4 w-4" />
 				</Input>
 			</div>

@@ -9,7 +9,6 @@
 
 	export let data: PageData;
 
-	
 	$: ({ task, subtask } = data.editData);
 	let newSubTask = false;
 
@@ -29,10 +28,10 @@
 		};
 	};
 
-	$: currentBoardName = $page.url.searchParams.get('boardName')
-	let boardName:string = ''
-	$:if(currentBoardName) {
-		boardName = currentBoardName
+	$: currentBoardName = $page.url.searchParams.get('boardName');
+	let boardName: string = '';
+	$: if (currentBoardName) {
+		boardName = currentBoardName;
 	}
 </script>
 

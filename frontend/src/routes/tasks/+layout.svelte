@@ -118,14 +118,18 @@
 </script>
 
 <Toaster />
-<main class="grid grid-cols-12 grid-rows-6 h-screen w-screen bg-[#f4ecf1] relative dark:bg-gray-950">
+<main
+	class="grid grid-cols-12 grid-rows-6 h-screen w-screen bg-[#f4ecf1] relative dark:bg-gray-950"
+>
 	<!-- HEADER -->
 	<header
 		class:h-sidebar={!sidebar}
-		class="col-start-3 col-end-13 border-b-2 dark:border-slate-600  bg-[#FFFFFF] flex items-center font-bold justify-between px-5 dark:bg-gray-800"
+		class="col-start-3 col-end-13 border-b-2 dark:border-slate-600 bg-[#FFFFFF] flex items-center font-bold justify-between px-5 dark:bg-gray-800"
 	>
 		<div>
-			<span  class="text-2xl dark:text-gray-200">{$page.url.searchParams.get('boardName') || ' '}</span>
+			<span class="text-2xl dark:text-gray-200"
+				>{$page.url.searchParams.get('boardName') || ' '}</span
+			>
 		</div>
 
 		<ul class="flex items-center gap-2">
@@ -187,14 +191,12 @@
 				</Modal>
 			</li>
 			<li>
-				<Button
-					
-					href="/settings/board"
-					color="alternative"><Settings class="h-4 w-4 mr-1" />Settings</Button
+				<Button href="/settings/board" color="alternative"
+					><Settings class="h-4 w-4 mr-1" />Settings</Button
 				>
 			</li>
 			<li>
-				<form action="/logout" >
+				<form action="/logout">
 					<Button type="submit" color="alternative"><LogOut class="h-4 w-4 mr-1" />Logout</Button>
 				</form>
 			</li>
@@ -207,9 +209,9 @@
 
 	{#if sidebar}
 		<aside
-			class="col-start-1 col-end-3 row-start-1 row-end-7 border-r-2 dark:border-slate-600  bg-[#FFFFFF] pl-1 pr-4 relative dark:bg-gray-800"
+			class="col-start-1 col-end-3 row-start-1 row-end-7 border-r-2 dark:border-slate-600 bg-[#FFFFFF] pl-1 pr-4 relative dark:bg-gray-800"
 		>
-			<div class="w-full h-[132.50px] flex items-center justify-center ">
+			<div class="w-full h-[132.50px] flex items-center justify-center">
 				<strong class="text-lg font-bold dark:text-gray-200"> LOGO </strong>
 			</div>
 			<div class="text-center">

@@ -5,20 +5,20 @@ export const load = (async () => {
 	return {};
 }) satisfies PageServerLoad;
 
-
-
 export const actions: Actions = {
-	login: async({request,locals}) => {
-		const formData = Object.fromEntries(await request.formData()) as {mail:string, password:string }
+	login: async ({ request, locals }) => {
+		const formData = Object.fromEntries(await request.formData()) as {
+			mail: string;
+			password: string;
+		};
 
 		try {
-			await locals.pb.collection('users').authWithPassword(formData.mail,formData.password)
-			
+			await locals.pb.collection('users').authWithPassword(formData.mail, formData.password);
 		} catch (err) {
-			console.log('Error: ', err)
-			return fail(413)
+			console.log('Error: ', err);
+			return fail(413);
 		}
 
-		throw redirect(303, '/tasks')
+		throw redirect(303, '/tasks');
 	}
 };

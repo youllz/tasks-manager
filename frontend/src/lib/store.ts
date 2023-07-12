@@ -1,7 +1,6 @@
-import { writable } from "svelte/store";
-import type { Record } from "pocketbase";
+import { writable } from 'svelte/store';
+import type { Record } from 'pocketbase';
 
+type Board = Record | undefined;
 
-type Board = Record | undefined
-
-export const currentBoard = writable<Board>()
+export const currentBoard = writable<Board>();

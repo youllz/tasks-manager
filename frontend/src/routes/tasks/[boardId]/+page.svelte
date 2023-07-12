@@ -3,14 +3,13 @@
 	import { page } from '$app/stores';
 	import type { Record } from 'pocketbase';
 	import toast, { Toaster } from 'svelte-french-toast';
-	import {currentBoard} from '$lib/store.js'
+	import { currentBoard } from '$lib/store.js';
 	export let data;
-	$: console.log(data.recordData);
 
 	$: ({ allTasks } = data);
-	$: ({recordData} = data)
+	$: ({ recordData } = data);
 
-	$currentBoard = data.recordData?.find((item) => item.id === $page.params.boardId)
+	$currentBoard = data.recordData?.find((item) => item.id === $page.params.boardId);
 
 	// let pageTasks = allTasks.filter((item:any) => item.boards === $page.params.task)
 	// console.log(pageTasks)
@@ -54,14 +53,14 @@
 			<span class="h-4 w-4 rounded-full bg-purple-600" />
 			<span class="dark:text-gray-400">TODO</span>
 		</header>
-		<div class="flex flex-col gap-2  py-3">
+		<div class="flex flex-col gap-2 py-3">
 			{#if todo.length === 0}
 				<div class="w-full h-[300px] flex items-center justify-center">
 					<span class="text-2xl font-extrabold opacity-20"> EMPTY </span>
 				</div>
 			{:else}
 				{#each todo as items}
-					<TaskCards  subtaskId={items.subtasks} taskId={items.id}>
+					<TaskCards subtaskId={items.subtasks} taskId={items.id}>
 						<span slot="card-title">
 							{items.title}
 						</span>
@@ -86,7 +85,7 @@
 			<span class="h-4 w-4 rounded-full bg-blue-600" />
 			<span class="dark:text-gray-400"> DOING </span>
 		</header>
-		<div class="flex flex-col gap-2 h-max  py-3">
+		<div class="flex flex-col gap-2 h-max py-3">
 			{#if doing.length === 0}
 				<div class="w-full h-[300px] flex items-center justify-center">
 					<span class="text-2xl font-extrabold opacity-20"> EMPTY </span>
