@@ -22,8 +22,6 @@
 	export let subtaskId: string[] = [];
 	export let taskId: string;
 
-
-
 	let status = [
 		{
 			value: 'todo',
@@ -105,9 +103,7 @@
 			<div class="flex flex-col gap-1">
 				{#each subTaskData as data}
 					<div class="bg-[#f4ecf1] p-2 dark:bg-gray-900">
-						<Checkbox name={data.id} checked={data.done === 'on'} 
-							>{data.title}</Checkbox
-						>
+						<Checkbox name={data.id} checked={data.done === 'on'}>{data.title}</Checkbox>
 					</div>
 				{/each}
 			</div>

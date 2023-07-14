@@ -65,6 +65,5 @@ export const actions: Actions = {
 			console.log('Error', err);
 			return fail(413);
 		}
-	},
-	
+	}
 };

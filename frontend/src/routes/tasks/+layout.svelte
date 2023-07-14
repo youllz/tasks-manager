@@ -151,7 +151,13 @@
 						<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add New Task</h3>
 						<Label class="space-y-2">
 							<span>Title</span>
-							<Input type="text" name="title" placeholder="e.g drink coffee" required />
+							<Input
+								type="text"
+								name="title"
+								placeholder="e.g drink coffee"
+								autocomplete="off"
+								required
+							/>
 						</Label>
 						<Label class="space-y-2">
 							<span> Description</span>
@@ -161,7 +167,7 @@
 							<span> Subtasks </span>
 							{#each numberOfSubtask as item, idx (item.id)}
 								<div class="flex items-center gap-1">
-									<Input bind:group={allSubtasks} name={'subtask' + (idx + 1)} />
+									<Input bind:group={allSubtasks} name={'subtask' + (idx + 1)} autocomplete="off" />
 									<Button
 										on:click={() => {
 											deleteSubTask(item.id);
@@ -262,6 +268,7 @@
 							placeholder="e.g Marketing Plan"
 							bind:value={boardValue}
 							required
+							autocomplete="off"
 						/>
 					</Label>
 

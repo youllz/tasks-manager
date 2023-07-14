@@ -24,7 +24,7 @@ export const load: PageServerLoad = (async ({ params, locals }) => {
 export const actions: Actions = {
 	saveTask: async ({ request, locals }) => {
 		const formData = Object.fromEntries(await request.formData()) as Record<string, string>;
-		console.log(formData)
+		console.log(formData);
 		function extratData() {
 			let data = structuredClone(formData);
 			delete data['status'];
@@ -41,15 +41,16 @@ export const actions: Actions = {
 		const data = extratData();
 
 		try {
-			const taskRecord = await locals.pb.collection('tasks').update(formData.taskId, { status: formData.status });
-			let subtasks = taskRecord.subtasks as string[]
-			for(let i = 0; i < subtasks.length; i++) {
-				if(subtasks[i] !== data.dataKeys[i]) {
-					await locals.pb.collection('subtasks').update(subtasks[i], {done: 'off'})
+			const taskRecord = await locals.pb
+				.collection('tasks')
+				.update(formData.taskId, { status: formData.status });
+			let subtasks = taskRecord.subtasks as string[];
+			for (let i = 0; i < subtasks.length; i++) {
+				if (subtasks[i] !== data.dataKeys[i]) {
+					await locals.pb.collection('subtasks').update(subtasks[i], { done: 'off' });
 				}
 			}
 
-			
 			for (let i = 0; i < data.dataKeys.length; i++) {
 				await locals.pb
 					.collection('subtasks')
