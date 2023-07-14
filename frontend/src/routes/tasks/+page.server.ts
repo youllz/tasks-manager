@@ -66,7 +66,5 @@ export const actions: Actions = {
 			return fail(413);
 		}
 	},
-	text: async () => {
-		console.log('test');
-	}
+	
 };

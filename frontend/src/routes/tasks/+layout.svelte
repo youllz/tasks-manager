@@ -217,7 +217,7 @@
 			<div class="text-center">
 				<small class="dark:text-gray-400"> ALL BOARD ({record.length})</small>
 			</div>
-			<nav class="mt-2 h-[400px] overflow-y-auto">
+			<nav class="mt-2 h-[30%] overflow-y-auto">
 				<ul class="flex flex-col gap-1">
 					{#each record as item, idx}
 						<li>

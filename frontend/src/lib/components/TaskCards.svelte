@@ -22,7 +22,7 @@
 	export let subtaskId: string[] = [];
 	export let taskId: string;
 
-	let selectValue = 'todo';
+
 
 	let status = [
 		{
